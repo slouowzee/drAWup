@@ -1,0 +1,7 @@
+/* * ------------------------------------ * */
+/** Importation des différents fichiers CSS
+/* * ------------------------------------ * */
+
+@import url("./var.css");
+@import url("./reset.css");
+@import url("./styles.css");

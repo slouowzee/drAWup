@@ -1,0 +1,31 @@
+/* * ------------------------------------ * */
+/** 	       Page de Login
+/* * ------------------------------------ * */
+
+.login__container {
+	background-color: var(--color-bg);
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.login {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--color-surface-blur);
+	width: 500px;
+	padding: 20px;
+	border-radius: var(--corner);
+	box-shadow: var(--shadow);
+	backdrop-filter: blur(10px);
+}
+
+.login__logo {
+	width: 250px;
+	margin-bottom: 10px;
+	user-select: none;
+}

@@ -1,0 +1,18 @@
+# === PHP / Composer ===
+vendor/
+composer.lock
+
+# === Environnements ===
+.env
+.env.*
+
+# === Logs ===
+*.log
+*.cache
+
+# === IDE ===
+.vscode/
+
+# === Autres ===
+*.swp
+*.tmp
