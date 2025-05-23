@@ -4,9 +4,25 @@
 
 :root {
 	--color-bg: #1e1e1e;
+	--color-bg-sub: #2b2b2b;
 	--color-surface-blur: rgba(255, 255, 255, 0.90);
+	--color-text-bright: #d0d0d0;
+	--color-text-dark: #2e2e2e;
+	--color-element: #E5571E;
+	--color-element-blur: rgba(229, 87, 30, 0.1);
 
 	--shadow: 0 0px 15px rgba(0, 0, 0, 0.4);
-
 	--corner: 16px;
+	--text-font: 'Poppins', sans-serif;
+	
+	--sidebar-expanded: 240px;
+	--sidebar-collapsed: 64px;
+	--transition-speed: 0.3s;
+}
+
+.light-theme {
+	--color-bg: #f0f0f0;
+	--color-bg-sub: #ffffff;
+	--color-text-bright: #1e1e1e;
+	--color-element-blur: rgba(229, 87, 30, 0.15);
 }

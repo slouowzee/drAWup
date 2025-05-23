@@ -3,6 +3,8 @@
 
 	class PannelController {
 		public function showPannel() {
-			echo "test";
+			require_once __DIR__ . "/../View/Global/Header.php";
+			require_once __DIR__ ."/../View/Sample/Pannel.php";
+			require_once __DIR__ . "/../View/Global/Footer.php";
 		}
 	}

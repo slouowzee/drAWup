@@ -7,10 +7,12 @@
 		<title>drAWup</title>
 
 		<link rel="stylesheet" href="src/View/Public/CSS/main.css" >
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
 
-		<script>
-			const BASE_URL = "<?php echo rtrim(dirname($_SERVER['SCRIPT_NAME']), '/'); ?>";
-		</script>
+
+		<script>const BASE_URL = "<?php echo rtrim(dirname($_SERVER['SCRIPT_NAME']), '/'); ?>";</script>
+		<script type="module" src="src/View/Public/JS/main.js"></script>
 	</head>
 
 	<body>

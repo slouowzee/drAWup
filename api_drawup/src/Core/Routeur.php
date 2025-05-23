@@ -9,7 +9,7 @@
 			$uri = $_SERVER['REQUEST_URI'];
 			$method = $_SERVER['REQUEST_METHOD'];
 
-			$base = '/drawup_demo/API_drAWup';
+			$base = '/drawup_demo/api_drawup';
         		$uri = preg_replace("#^" . preg_quote($base) . "#", '', $uri);
 
 			if ($uri === '/api/login' && $method === 'POST') {
