@@ -5,10 +5,13 @@
 	use Core\Routeur;
 	use Core\Env;
 
-	
+
 	$allowedOrigins = [
-	"http://localhost"
+		"http://localhost",
+		"http://localhost/drawup_demo",
+		"http://localhost/drawup_demo/drawup"
 	];
+
 
 	$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 

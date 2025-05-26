@@ -2,7 +2,7 @@
 			<div class="login">
 				<script src="https://accounts.google.com/gsi/client" async defer></script>
 
-				<img class="login__logo" src="src/View/Public/IMG/drawup_wo_bg.png" alt="Logo drAW up">
+				<img class="login__logo" src="src\View\Public\IMG\drawup-wo-bg.png" alt="Logo drAW up">
 				
 				<div id="g_id_onload"
 					data-client_id="248016549737-muuo2uhaem854v3imejpuhrrmjj68qav.apps.googleusercontent.com"

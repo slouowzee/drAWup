@@ -1,25 +1,31 @@
 		<main class="pannel__container">
 			<aside class="pannel__navbar">
 				<div class="navbar__logo-wrapper">
-					<img class="navbar__logo" src="src/View/Public/IMG/drawup_wo_bg.png" alt="Logo">
+					<!-- Logo clair -->
+					<a href="<?php echo BASE_URL . '/pannel'?>"><img class="navbar__logo logo-light" src="<?php echo BASE_URL . 'src/View/Public/IMG/drawup-wo-bg.png'?>" alt="Logo clair"></a>
+
+					<!-- Logo foncé -->
+					<a href="<?php echo BASE_URL . '/pannel'?>"><img class="navbar__logo logo-dark" src="<?php echo BASE_URL . 'src/View/Public/IMG/drawup-blanc-wo-bg.png'?>" alt="Logo sombre"></a>
 				</div>
 
 				<nav class="navbar__content">
 					<div class="navbar__logo-mobile">
-						<img src="src/View/Public/IMG/drawup_wo_bg.png" alt="Logo mobile" class="navbar__logo" />
+						<a href="<?php echo BASE_URL . '/pannel'?>"><img class="navbar__logo logo-light" src="<?php echo BASE_URL . 'src/View/Public/IMG/drawup-wo-bg.png'?>" alt="Logo clair"></a>
+						<a href="<?php echo BASE_URL . '/pannel'?>"><img class="navbar__logo logo-dark" src="<?php echo BASE_URL . 'src/View/Public/IMG/drawup-blanc-wo-bg.png'?>" alt="Logo sombre"></a>
 					</div>
+
 					<ul class="navbar__menu">
 						<li>
-							<a href="#"><i class="fa-solid fa-book"></i><span>Bibliothèque</span></a>
+							<a href="<?php echo BASE_URL . '/pannel/lib'?>"><i class="fa-solid fa-book"></i><span>Bibliothèque</span></a>
 						</li>
 						<li>
-							<a href="#"><i class="fa-solid fa-pen"></i><span>Nouveau</span></a>
+							<a href="<?php echo BASE_URL . '/pannel/new'?>"><i class="fa-solid fa-pen"></i><span>Nouveau</span></a>
 						</li>
 						<li>
-							<a href="#"><i class="fa-solid fa-users"></i><span>Clients</span></a>
+							<a href="<?php echo BASE_URL . '/pannel/client'?>"><i class="fa-solid fa-users"></i><span>Clients</span></a>
 						</li>
 						<li>
-							<a href="#"><i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span></a>
+							<a href="<?php echo BASE_URL . '/logout'?>"><i class="fa-solid fa-right-from-bracket"></i><span>Déconnexion</span></a>
 						</li>
 					</ul>
 
@@ -27,7 +33,6 @@
 						<i class="fas fa-sun"></i>
 						<span>Thème</span>
 					</button>
-
 				</nav>
 
 				<!-- Boutons en bas de la sidebar -->
@@ -48,3 +53,4 @@
 					<i class="fa-solid fa-bars"></i>
 				</button>
 			</aside>
+
