@@ -4,62 +4,68 @@
 
 /* * 1. Supprimer les marges et paddings par défaut */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: var(--text-font);
 }
 
 /* * 2. Supprimer les bordures et polices par défaut sur les éléments communs */
 body, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 dl, dd, ol, ul, figure, hr, fieldset, legend {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 /* * 3. Normaliser les styles de base */
 html, body {
-  height: 100%;
-  font-family: sans-serif;
-  line-height: 1.5;
+	height: 100%;
+	line-height: 1.5;
+	background-color: var(--color-bg);
+	color: var(--color-text-bright);
+	font-family: var(--text-font);
+	transition: 
+		background-color var(--transition-speed) ease,
+		color var(--transition-speed) ease;
 }
 
 /* * 4. Supprimer la décoration des liens */
 a {
-  text-decoration: none;
-  color: inherit;
+	text-decoration: none;
+	color: inherit;
 }
 
 /* * 5. Uniformiser les listes */
 ul, ol {
-  list-style: none;
+	list-style: none;
 }
 
 /* * 6. Supprimer les bordures sur les éléments media */
 img, video {
-  max-width: 100%;
-  height: auto;
-  display: block;
+	max-width: 100%;
+	height: auto;
+	display: block;
 }
 
 /* * 7. Hériter des polices pour les formulaires */
 input, button, textarea, select {
-  font: inherit;
+	font: inherit;
 }
 
 /* * 8. Cursor pointer pour les boutons */
 button {
-  cursor: pointer;
-  background: none;
-  border: none;
+	cursor: pointer;
+	background: none;
+	border: none;
 }
 
 /* * 9. Éviter les styles involontaires des tables */
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 /** 10. Ajuster les éléments HTML5 */
 article, aside, footer, header, nav, section, main {
-  display: block;
+	display: block;
 }

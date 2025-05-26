@@ -5,9 +5,11 @@
 
 	$routeur = new Routeur();
 
+	
+
 	// Connexion
 	$routeur->get('', 'user', 'login');
-	$routeur->get('/pannel','pannel','showPannel');
+	$routeur->get('/pannel','pannel','showWelcomePannel');
 	$routeur->get('/wait','wait','showWait');
 
 

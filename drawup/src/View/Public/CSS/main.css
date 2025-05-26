@@ -1,7 +1,16 @@
+/* * --------------------------------------------- * */
+/** Importation des différents fichiers CSS critique
+/* * --------------------------------------------- * */
+
+@import url("./var.css");
+@import url("./reset.css");
+
+
+
 /* * ------------------------------------ * */
 /** Importation des différents fichiers CSS
 /* * ------------------------------------ * */
 
-@import url("./var.css");
-@import url("./reset.css");
-@import url("./styles.css");
+@import url("./page/login.css");
+@import url("./page/wait.css");
+@import url("./page/pannel.css");

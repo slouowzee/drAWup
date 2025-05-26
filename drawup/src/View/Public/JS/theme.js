@@ -1,17 +1,20 @@
-document.addEventListener("DOMContentLoaded", function () {
-	const themeBtn = document.querySelector(".theme__toggle");
+document.addEventListener("DOMContentLoaded", () => {
+	const desktopBtn = document.querySelector(".theme__toggle");
+	const mobileBtn = document.querySelector(".theme__toggle-mobile");
 
-	if (themeBtn) {
-		themeBtn.addEventListener("click", () => {
-			document.body.classList.toggle("light-theme");
-			const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
-			localStorage.setItem("theme", theme);
-		});
-	}
+	const toggleTheme = () => {
+		document.body.classList.toggle("dark-theme");
+		localStorage.setItem(
+			"theme",
+			document.body.classList.contains("dark-theme") ? "dark" : "light"
+		);
+	};
 
-	// Appliquer le thème enregistré
-	const savedTheme = localStorage.getItem("theme");
-	if (savedTheme === "light") {
-		document.body.classList.add("light-theme");
+	desktopBtn?.addEventListener("click", toggleTheme);
+	mobileBtn?.addEventListener("click", toggleTheme);
+
+	// Appliquer le thème sauvegardé
+	if (localStorage.getItem("theme") === "dark") {
+		document.body.classList.add("dark-theme");
 	}
 });

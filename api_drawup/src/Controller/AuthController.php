@@ -43,6 +43,7 @@
 
 				session_start();
 				$_SESSION['user_id'] = $user['id'];
+				$_SESSION['user_name'] = $user['name'];
 				$_SESSION['user_valid'] = $user['valid'];
 
 				echo json_encode(["success" => true, "user" => $user, "debug" => $payload]);

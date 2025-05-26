@@ -1,0 +1,61 @@
+/* * ------------------------------------ * */
+/** 	       Page d'attente
+/* * ------------------------------------ * */
+
+.wait__container {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 2rem;
+	padding: 2rem;
+	background-color: var(--color-bg);
+}
+
+.wait {
+	background-color: var(--color-bg-sub);
+	padding: 2rem 3rem;
+	border-radius: 16px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+	text-align: center;
+	max-width: 600px;
+	width: 100%;
+}
+
+.wait__title {
+	font-size: 1.8rem;
+	color: var(--color-text-bright);
+	margin-bottom: 1rem;
+	font-weight: 600;
+}
+
+.wait_connect {
+	border: none;
+	height: 2px;
+	background-color: var(--color-element);
+	margin: 1rem auto;
+	width: 50%;
+	border-radius: 2px;
+}
+
+.wait__text {
+	color: var(--color-text-bright);
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
+.return {
+	color: var(--color-element);
+	text-decoration: none;
+	font-weight: 500;
+	padding: 0.75rem 1.5rem;
+	border: 2px solid var(--color-element);
+	border-radius: 8px;
+	transition: all 0.3s ease;
+}
+
+.return:hover {
+	background-color: var(--color-element);
+	color: var(--color-bg);
+}
