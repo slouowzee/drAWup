@@ -11,7 +11,8 @@
 	--color-element: #E5571E;
 
 	--shadow: 0 0px 15px rgba(0, 0, 0, 0.4);
-	--corner: 16px;
+	--corner-xl: 16px;
+	--corner-sm: 8px;
 	--text-font: 'Poppins', sans-serif;
 	
 	--sidebar-expanded: 240px;
