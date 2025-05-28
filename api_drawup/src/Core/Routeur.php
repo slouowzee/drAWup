@@ -3,6 +3,8 @@
 	namespace Core;
 
 	use Controller\AuthController;
+	use Controller\ClientController;
+	use Controller\ArticleController;
 
 	class Routeur {
 		public function routeRequest() {
@@ -12,8 +14,14 @@
 			$base = '/drawup_demo/api_drawup';
         		$uri = preg_replace("#^" . preg_quote($base) . "#", '', $uri);
 
-			if ($uri === '/api/login' && $method === 'POST') {
+			if ($uri === '/api/user/login' && $method === 'POST') {
 				(new AuthController())->googleLogin();
+			} elseif ($uri === '/api/client/total' && $method === 'GET') {
+				(new ClientController())->getTotalClient();
+			} elseif ($uri === '/api/client/all' && $method === 'GET') {
+				(new ClientController())->getAllClient();
+			} elseif ($uri === '/api/article/total' && $method === 'GET') {
+				(new ArticleController())->getTotalArticle();
 			} else {
 				http_response_code(404);
 				echo json_encode(["error" => "Route non trouvée"]);

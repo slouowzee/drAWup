@@ -1,0 +1,333 @@
+/* Styles pour la modale de confirmation */
+.modal {
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	display: none;
+}
+
+.modal-content {
+	background-color: #fff;
+	margin: 15% auto;
+	padding: 20px;
+	border-radius: 5px;
+	width: 50%;
+	max-width: 500px;
+}
+
+.close {
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.modal-header, .modal-body, .modal-footer {
+	padding: 10px;
+}
+
+.modal-footer {
+	text-align: right;
+}
+
+.btn-cancel, .btn-confirm {
+	padding: 8px 16px;
+	margin-left: 10px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.btn-cancel {
+	background-color: #ccc;
+}
+
+.btn-confirm {
+	background-color: #dc3545;
+	color: white;
+}
+
+/* Styles pour le tableau client */
+.pannel__content-table-container {
+	background-color: var(--color-bg-sub);
+	border-radius: var(--corner-xl);
+	padding: 1.5rem;
+	box-shadow: var(--shadow);
+	width: 100%;
+	margin-bottom: 2rem;
+	overflow: hidden;
+}
+
+.pannel__content-table-actions {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1.5rem;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.pannel__content-table-actions-left,
+.pannel__content-table-actions-right {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.pannel__content-table-actions-right {
+	margin-left: auto;
+}
+
+.pannel__content-search {
+	display: flex;
+	align-items: center;
+	background-color: var(--color-bg);
+	border-radius: var(--corner-sm);
+	padding: 0.5rem;
+	box-shadow: var(--shadow-sm);
+}
+
+.pannel__content-reset-button {
+	background-color: var(--color-bg);
+	color: var(--color-element);
+	border: none;
+	border-radius: 50%;
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: var(--shadow-sm);
+}
+
+.pannel__content-reset-button:hover {
+	background-color: var(--color-element-blur);
+}
+
+/* Animation de rotation pour le bouton réinitialiser */
+.pannel__content-reset-button.rotating i {
+	animation: rotate-reload 0.8s ease;
+}
+
+@keyframes rotate-reload {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.pannel__content-search-input {
+	border: none;
+	background: transparent;
+	padding: 0.5rem;
+	width: 250px;
+	color: var(--color-text-bright);
+	outline: none;
+}
+
+.pannel__content-search-button {
+	background: none;
+	border: none;
+	color: var(--color-element);
+	cursor: pointer;
+	padding: 0.5rem;
+}
+
+.pannel__content-table-wrapper {
+	overflow-x: auto;
+	margin-bottom: 1.5rem;
+	background-color: var(--color-bg);
+	border-radius: var(--corner-sm);
+}
+
+.pannel__content-table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.pannel__content-table thead {
+	background-color: var(--color-element-blur);
+}
+
+.pannel__content-table th {
+	color: var(--color-text-bright);
+	font-weight: 600;
+	text-align: left;
+	padding: 1rem;
+	position: relative;
+	cursor: pointer;
+}
+
+.pannel__content-table th:after,
+.pannel__content-table th:before {
+	position: absolute;
+	display: block;
+	right: 5px;
+	color: var(--color-element);
+	font-size: 0.8em;
+	opacity: 0.5;
+}
+
+.pannel__content-table th.headerSortUp:after {
+	content: "▲";
+	opacity: 1;
+}
+
+.pannel__content-table th.headerSortDown:after {
+	content: "▼";
+	opacity: 1;
+}
+
+.pannel__content-table tbody tr {
+	transition: background-color 0.2s ease;
+}
+
+.pannel__content-table tbody tr:nth-child(even) {
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+.pannel__content-table tbody tr:hover {
+	background-color: var(--color-element-blur);
+}
+
+.pannel__content-table td {
+	padding: 0.8rem 1rem;
+	border-bottom: 1px solid var(--color-bg-sub);
+	color: var(--color-text-bright);
+}
+
+.pannel__content-table-loading, 
+.pannel__content-table-error, 
+.pannel__content-table-empty {
+	text-align: center;
+	padding: 2rem !important;
+	color: var(--color-text-bright);
+}
+
+.pannel__content-table-error {
+	color: #dc3545;
+}
+
+.client-actions {
+	display: flex;
+	gap: 0.5rem;
+	justify-content: center;
+}
+
+.btn-edit, .btn-delete {
+	background: none;
+	border: none;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.btn-edit {
+	color: var(--color-element);
+}
+
+.btn-delete {
+	color: #dc3545;
+}
+
+.btn-edit:hover {
+	background-color: var(--color-element-blur);
+}
+
+.btn-delete:hover {
+	background-color: rgba(220, 53, 69, 0.1);
+}
+
+/* Style pour le logo client */
+.client-logo {
+	text-align: center;
+}
+
+.client-logo-img {
+	max-width: 60px;
+	max-height: 60px;
+	object-fit: contain;
+	border-radius: 4px;
+	background-color: #fff;
+	padding: 2px;
+	border: 1px solid #ddd;
+}
+
+.pannel__content-table-pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+}
+
+.pannel__content-pagination-btn {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background-color: var(--color-bg);
+	color: var(--color-text-bright);
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: var(--shadow-sm);
+}
+
+.pannel__content-pagination-btn:not(:disabled):hover {
+	background-color: var(--color-element-blur);
+}
+
+.pannel__content-pagination-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.pannel__content-pagination-info {
+	color: var(--color-text-bright);
+	font-size: 0.9rem;
+}
+
+/* Tablesorter overrides */
+.tablesorter-default .header,
+.tablesorter-default .tablesorter-header {
+	background-image: none;
+	padding: 0.8rem 1rem;
+	cursor: pointer;
+}
+
+.tablesorter-default thead .headerSortUp,
+.tablesorter-default thead .tablesorter-headerSortUp,
+.tablesorter-default thead .tablesorter-headerAsc {
+	background-image: none;
+	background-color: var(--color-element-blur);
+	color: var(--color-element);
+}
+
+.tablesorter-default thead .headerSortDown,
+.tablesorter-default thead .tablesorter-headerSortDown,
+.tablesorter-default thead .tablesorter-headerDesc {
+	background-image: none;
+	background-color: var(--color-element-blur);
+	color: var(--color-element);
+}
+
+.tablesorter-default thead .sorter-false {
+	background-image: none;
+	cursor: default;
+}

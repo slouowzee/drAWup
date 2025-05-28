@@ -54,6 +54,7 @@
 				}
 				$_SESSION['user_id'] = $user['id'];
 				$_SESSION['user_name'] = $user['name'];
+				$_SESSION['user_email'] = $user['email'];
 				$_SESSION['user_picture'] = $payload['picture'] ?? null;
 				$_SESSION['user_valid'] = $user['valid'];
 

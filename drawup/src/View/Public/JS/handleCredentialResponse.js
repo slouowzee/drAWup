@@ -2,7 +2,7 @@ async function handleCredentialResponse(response) {
 	const credential = response.credential;
 
 	try {
-		const res = await fetch('http://localhost/drawup_demo/api_drawup/api/login', {
+		const res = await fetch('http://localhost/drawup_demo/api_drawup/api/user/login', {
 			method: 'POST',
 			credentials: 'include',
 			headers: { 'Content-Type': 'application/json' },

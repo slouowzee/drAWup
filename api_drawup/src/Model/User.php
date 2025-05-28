@@ -4,6 +4,7 @@
 
 	use Core\Database;
 	use PDO;
+	use PDOException;
 
 	class User {
 		private $db;
@@ -13,20 +14,26 @@
 		}
 
 		public function findOrCreate($email, $name) {
-			$stmt = $this->db->prepare("SELECT IDUTIL as id, NOMUTIL as name, EMAILUTIL as email, ACTIFUTIL as valid FROM utilisateur WHERE EMAILUTIL = ?");
-			$stmt->execute([$email]);
-			$user = $stmt->fetch(PDO::FETCH_ASSOC);
+			try {
+				$stmt = $this->db->prepare("SELECT IDUTIL as id, NOMUTIL as name, EMAILUTIL as email, ACTIFUTIL as valid FROM utilisateur WHERE EMAILUTIL = ?");
+				$stmt->execute([$email]);
+				$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-			if ($user) return $user;
+				if ($user) return $user;
 
-			$stmt = $this->db->prepare("INSERT INTO utilisateur (NOMUTIL, EMAILUTIL) VALUES (?, ?)");
-			$stmt->execute([$name, $email]);
+				$stmt = $this->db->prepare("INSERT INTO utilisateur (NOMUTIL, EMAILUTIL) VALUES (?, ?)");
+				$stmt->execute([$name, $email]);
 
-			return [
-				'id' => $this->db->lastInsertId(),
-				'name' => $name,
-				'email' => $email,
-				'valid' => 0
-			];
+				return [
+					'id' => $this->db->lastInsertId(),
+					'name' => $name,
+					'email' => $email,
+					'valid' => 0
+				];
+			} catch (PDOException $e) {
+				error_log("Database error: " . $e->getMessage());
+				$this->db = null;
+				return null;
+			}
 		}
 	}
