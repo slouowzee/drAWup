@@ -1,21 +1,23 @@
-// Script de gestion des clients pour DrawUp
 document.addEventListener('DOMContentLoaded', function() {
-	// Initialiser tablesorter
+	if (typeof BASE_URL === 'undefined') {
+		console.error('La constante BASE_URL n\'est pas définie. La redirection des boutons peut ne pas fonctionner correctement.');
+		window.BASE_URL = 'http://localhost/drawup_demo/drawup';
+	}
 	$("#clientTable").tablesorter({
 		theme: 'default',
 		widgets: ['zebra'],
 		headers: {
-			8: { sorter: false } // Désactiver le tri sur la colonne des actions
+			1: { sorter: false }, // Désactiver le tri sur la colonne des logos
+			7: { sorter: false }, // Désactiver le tri sur la colonne des contacts
+			8: { sorter: false }  // Désactiver le tri sur la colonne des actions
 		}
 	});
 	
-	// Variables pour la pagination
 	let currentPage = 1;
-	const itemsPerPage = 10;
+	let itemsPerPage = 10; // Nombre d'éléments par page, valeur par défaut
 	let totalClients = 0;
 	let allClients = [];
 	
-	// Charger les clients depuis l'API
 	async function loadClients() {
 		try {
 			const response = await fetch('http://localhost/drawup_demo/api_drawup/api/client/all', {
@@ -38,10 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				const totalPages = Math.ceil(totalClients / itemsPerPage);
 				document.getElementById('totalPages').textContent = totalPages;
 				
-				// Afficher la première page
 				displayClients(currentPage);
 				
-				// Mettre à jour les boutons de pagination
 				updatePaginationButtons();
 			} else {
 				console.error("Erreur API :", data.error || "Réponse inattendue");
@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 	
-	// Afficher les clients pour une page donnée
 	function displayClients(page) {
 		const start = (page - 1) * itemsPerPage;
 		const end = start + itemsPerPage;
@@ -70,58 +69,77 @@ document.addEventListener('DOMContentLoaded', function() {
 			return;
 		}
 		
-		// Template pour les lignes
 		const template = document.getElementById('client-row-template');
 		
-		// Remplir le tableau avec les clients
 		clientsToDisplay.forEach(client => {
 			const clone = document.importNode(template.content, true);
 			
-			clone.querySelector('.client-id').textContent = client.IDCLI;
-			clone.querySelector('.client-lastname').textContent = client.NOMCLI;
-			clone.querySelector('.client-firstname').textContent = client.PRENOMCLI;
-			clone.querySelector('.client-address').textContent = client.ADRCLI;
-			clone.querySelector('.client-city').textContent = client.VILLECLI;
-			clone.querySelector('.client-postalcode').textContent = client.CPCLI;
-			clone.querySelector('.client-contact').textContent = client.LIGNECONTACTCLI;
+			const idCell = clone.querySelector('.client-id');
+			idCell.textContent = client.IDCLI;
+			idCell.title = `ID: ${client.IDCLI}`;
 			
-			// Affichage du logo si disponible
-			if (client.LOGOCLI && clone.querySelector('.client-logo')) {
+			const lastnameCell = clone.querySelector('.client-lastname');
+			lastnameCell.textContent = client.NOMCLI;
+			lastnameCell.title = `Nom: ${client.NOMCLI}`;
+			
+			const firstnameCell = clone.querySelector('.client-firstname');
+			firstnameCell.textContent = client.PRENOMCLI;
+			firstnameCell.title = `Prénom: ${client.PRENOMCLI}`;
+			
+			const addressCell = clone.querySelector('.client-address');
+			addressCell.textContent = client.ADRCLI;
+			addressCell.title = `Adresse: ${client.ADRCLI}`;
+			
+			const cityCell = clone.querySelector('.client-city');
+			cityCell.textContent = client.VILLECLI;
+			cityCell.title = `Ville: ${client.VILLECLI}`;
+			
+			const postalcodeCell = clone.querySelector('.client-postalcode');
+			postalcodeCell.textContent = client.CPCLI;
+			postalcodeCell.title = `Code postal: ${client.CPCLI}`;
+			
+			const contactCell = clone.querySelector('.client-contact');
+			contactCell.textContent = client.LIGNECONTACTCLI;
+			contactCell.title = `Contact: ${client.LIGNECONTACTCLI}`;
+
+			const logoContainer = clone.querySelector('.client-logo-container');
+			if (client.LOGOCLI && logoContainer) {
 				const logoImg = document.createElement('img');
 				logoImg.src = client.LOGOCLI;
 				logoImg.alt = `Logo de ${client.NOMCLI}`;
-				logoImg.className = 'client-logo-img';
-				clone.querySelector('.client-logo').appendChild(logoImg);
-			} else if (clone.querySelector('.client-logo')) {
-				clone.querySelector('.client-logo').textContent = 'Aucun logo';
+				logoImg.className = 'client-logo-image';
+				logoContainer.appendChild(logoImg);
+			} else if (logoContainer) {
+				const placeholder = document.createElement('div');
+				placeholder.className = 'client-logo-placeholder';
+				placeholder.innerHTML = '<i class="fas fa-building"></i>';
+				logoContainer.appendChild(placeholder);
 			}
 			
-			// Bouton d'action - Edition seulement
 			const editBtn = clone.querySelector('.btn-edit');
 			if (editBtn) {
-				editBtn.addEventListener('click', () => {
-					window.location.href = `${BASE_URL}client/edit/${client.IDCLI}`;
-				});
+			editBtn.addEventListener('click', () => {
+				const baseUrl = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+				window.location.href = `${baseUrl}/pannel/client/${client.IDCLI}`;
+			});
 			}
 			
 			tbody.appendChild(clone);
 		});
 		
-		// Mettre à jour tablesorter
 		$("#clientTable").trigger("update");
 	}
-	
-	// Mettre à jour les boutons de pagination
+
 	function updatePaginationButtons() {
 		const totalPages = Math.ceil(totalClients / itemsPerPage);
 		document.getElementById('currentPage').textContent = currentPage;
 		
-		// Activer/désactiver les boutons selon la page actuelle
+		document.getElementById('firstPage').disabled = (currentPage <= 1);
 		document.getElementById('prevPage').disabled = (currentPage <= 1);
 		document.getElementById('nextPage').disabled = (currentPage >= totalPages);
+		document.getElementById('lastPage').disabled = (currentPage >= totalPages);
 	}
 	
-	// Événements de pagination
 	document.getElementById('prevPage').addEventListener('click', () => {
 		if (currentPage > 1) {
 			currentPage--;
@@ -138,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			updatePaginationButtons();
 		}
 	});
-	  // Fonction de recherche
+
 	document.getElementById('client-search').addEventListener('input', function() {
 		const searchTerm = this.value.toLowerCase();
 		
@@ -153,22 +171,44 @@ document.addEventListener('DOMContentLoaded', function() {
 			totalClients = filteredClients.length;
 			allClients = filteredClients;
 		} else {
-			// Si la recherche est vide, recharger tous les clients
 			loadClients();
 			return;
 		}
 		
-		// Mettre à jour l'affichage
 		const totalPages = Math.ceil(totalClients / itemsPerPage);
 		document.getElementById('totalPages').textContent = totalPages;
 		displayClients(currentPage);
 		updatePaginationButtons();
 	});
-	
-	// Bouton réinitialiser la recherche
 	document.getElementById('reset-search').addEventListener('click', function() {
 		document.getElementById('client-search').value = '';
 		loadClients();
+	});
+
+	document.getElementById('items-per-page').addEventListener('change', function() {
+		itemsPerPage = parseInt(this.value);
+		currentPage = 1;
+		const totalPages = Math.ceil(totalClients / itemsPerPage);
+		document.getElementById('totalPages').textContent = totalPages;
+		displayClients(currentPage);
+		updatePaginationButtons();
+	});
+
+	document.getElementById('firstPage').addEventListener('click', function() {
+		if (currentPage !== 1) {
+			currentPage = 1;
+			displayClients(currentPage);
+			updatePaginationButtons();
+		}
+	});
+
+	document.getElementById('lastPage').addEventListener('click', function() {
+		const totalPages = Math.ceil(totalClients / itemsPerPage);
+		if (currentPage !== totalPages) {
+			currentPage = totalPages;
+			displayClients(currentPage);
+			updatePaginationButtons();
+		}
 	});
 	loadClients();
 });

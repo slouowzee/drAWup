@@ -26,3 +26,5 @@
 			<button class="second__theme__toggle">
 				<i class="fa-solid fa-circle-half-stroke"></i>
 			</button>
+			<script type="module" src="<?= BASE_URL . 'src/View/Public/JS/theme.js'?>"></script>
+			<script type="module" src="<?= BASE_URL . 'src/View/Public/JS/handleCredentialResponse.js'?>"></script>

@@ -29,6 +29,7 @@ async function getTotalArticle() {
 		return null;
 	}
 }
+
 document.addEventListener('DOMContentLoaded', function() {
 	getTotalArticle();
 });

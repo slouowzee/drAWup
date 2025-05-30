@@ -9,3 +9,4 @@
 			<button class="second__theme__toggle">
 				<i class="fa-solid fa-circle-half-stroke"></i>
 			</button>
+			<script src="<?php echo BASE_URL . '/src/View/Public/JS/theme.js' ?>"></script>

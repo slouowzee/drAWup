@@ -66,3 +66,6 @@
 					</div>
 				</div>
 			</section>
+			<script src="<?= BASE_URL . 'src/View/Public/JS/getTotalClient.js'?>"></script>
+			<script src="<?= BASE_URL . 'src/View/Public/JS/getTotalArticle.js'?>"></script>
+			

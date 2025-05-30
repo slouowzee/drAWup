@@ -29,6 +29,7 @@ async function getTotalClient() {
 		return null;
 	}
 }
+
 document.addEventListener('DOMContentLoaded', function() {
 	getTotalClient();
 });

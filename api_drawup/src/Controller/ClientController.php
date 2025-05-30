@@ -95,16 +95,17 @@
 			// 		"error" => "Erreur lors de la suppression du client: " . $e->getMessage()
 			// 	]);
 			// }
-		}
-
-		public function getAllClient() {
+		}		public function getAllClient() {
 			try {
 				$clients = $this->clientModel->getAllClients();
+				
 				if ($clients) {
+					ini_set('memory_limit', '256M');
+					
 					echo json_encode([
 						"success" => true,
 						"clients" => $clients
-					]);
+					], flags: JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
 				} else {
 					http_response_code(404);
 					echo json_encode([
@@ -117,6 +118,39 @@
 				echo json_encode([
 					"success" => false,
 					"error" => "Erreur lors de la récupération des clients: " . $e->getMessage()
+				]);
+			}
+		}
+
+		public function getClientByID($clientId) {
+			if (empty($clientId) || !is_numeric($clientId)) {
+				http_response_code(400);
+				echo json_encode([
+					"success" => false,
+					"error" => "ID du client invalide"
+				]);
+				return;
+			}
+
+			try {
+				$client = $this->clientModel->getClientByID($clientId);
+				if ($client) {
+					echo json_encode([
+						"success" => true,
+						"client" => $client
+					]);
+				} else {
+					http_response_code(404);
+					echo json_encode([
+						"success" => false,
+						"error" => "Client non trouvé"
+					]);
+				}
+			} catch (\Exception $e) {
+				http_response_code(500);
+				echo json_encode([
+					"success" => false,
+					"error" => "Erreur lors de la récupération du client: " . $e->getMessage()
 				]);
 			}
 		}

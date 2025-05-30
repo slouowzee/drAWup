@@ -7,9 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		const isDark = document.body.classList.contains("dark-theme");
 		const iconClass = isDark ? "fa-moon" : "fa-sun";
 
-		// Debug pour vérifier si otherBtn est trouvé
-		console.log("otherBtn:", otherBtn);
-
 		[desktopBtn, mobileBtn, otherBtn].forEach((btn) => {
 			if (btn) {
 				const icon = btn.querySelector("i");
@@ -30,12 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
 		updateIcons();
 	};
 
-	// Vérifier si les boutons existent avant d'ajouter les event listeners
 	if (desktopBtn) desktopBtn.addEventListener("click", toggleTheme);
 	if (mobileBtn) mobileBtn.addEventListener("click", toggleTheme);
 	if (otherBtn) otherBtn.addEventListener("click", toggleTheme);
 
-	// Appliquer le thème sauvegardé
 	if (localStorage.getItem("theme") === "dark") {
 		document.body.classList.add("dark-theme");
 	}

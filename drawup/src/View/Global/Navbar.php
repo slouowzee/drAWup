@@ -35,7 +35,6 @@
 					</button>
 				</nav>
 
-				<!-- Boutons en bas de la sidebar -->
 				<div class="navbar__bottom">
 					<button class="theme__toggle">
 						<i class="fa-solid fa-circle-half-stroke"></i>
@@ -48,9 +47,9 @@
 					</button>
 				</div>
 
-				<!-- Bouton mobile uniquement -->
 				<button class="mobile__menu-toggle">
 					<i class="fa-solid fa-bars"></i>
 				</button>
 			</aside>
-
+			<script type="module" src="<?= BASE_URL . 'src/View/Public/JS/theme.js'?>"></script>
+			<script type="module" src="<?= BASE_URL . 'src/View/Public/JS/sidebar.js'?>"></script>

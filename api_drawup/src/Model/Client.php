@@ -53,12 +53,52 @@
 			// 	return false;
 			// }
 		}
-
 		public function getAllClients() {
 			try {
 				$stmt = $this->db->prepare("SELECT * FROM client");
 				$stmt->execute();
-				return $stmt->fetchAll(PDO::FETCH_ASSOC);
+				
+				$clients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				$count = count($clients);
+				
+				foreach ($clients as &$client) {
+					if (!empty($client['LOGOCLI'])) {
+						// Déterminer le type MIME
+						$finfo = new \finfo(FILEINFO_MIME_TYPE);
+						$mime = $finfo->buffer($client['LOGOCLI']) ?: 'application/octet-stream';
+						
+						// Convertir en base64 et formater comme data URL
+						$base64 = base64_encode($client['LOGOCLI']);
+						$client['LOGOCLI'] = "data:{$mime};base64,{$base64}";
+					}
+				}
+
+				return $clients;
+			} catch (PDOException $e) {
+				error_log("Database error: " . $e->getMessage());
+				return false;
+			}
+		}
+
+		public function getClientByID($clientId) {
+			try {
+				$stmt = $this->db->prepare("SELECT * FROM client WHERE IDCLI = :clientId");
+				$stmt->bindParam(':clientId', $clientId, PDO::PARAM_INT);
+				$stmt->execute();
+
+				$client = $stmt->fetch(PDO::FETCH_ASSOC);
+
+				if ($client && !empty($client['LOGOCLI'])) {
+					// Déterminer le type MIME
+					$finfo = new \finfo(FILEINFO_MIME_TYPE);
+					$mime = $finfo->buffer($client['LOGOCLI']) ?: 'application/octet-stream';
+
+					// Convertir en base64 et formater comme data URL
+					$base64 = base64_encode($client['LOGOCLI']);
+					$client['LOGOCLI'] = "data:{$mime};base64,{$base64}";
+				}
+
+				return $client;
 			} catch (PDOException $e) {
 				error_log("Database error: " . $e->getMessage());
 				return false;

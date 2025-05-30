@@ -1,6 +1,0 @@
-import "./handleCredentialResponse.js"
-import "./sidebar.js"
-import "./theme.js"
-import "./getTotalClient.js"
-import "./getTotalArticle.js"
-import "./loadClient.js"
