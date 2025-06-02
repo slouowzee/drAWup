@@ -9,6 +9,7 @@
 		public function googleLogin() {
 			$input = json_decode(file_get_contents("php://input"), true);
 			$idToken = $input['credential'] ?? null;
+			file_put_contents('php://stderr', "ID Token reçu: " . $idToken . PHP_EOL);
 
 			if (!$idToken) {
 				http_response_code(400);
@@ -45,8 +46,8 @@
 					session_set_cookie_params([
 						'lifetime' => 0,
 						'path' => '/',
-						'domain' => 'localhost',
-						'secure' => false,
+						'domain' => 'assured-concise-ladybird.ngrok-free.app',
+						'secure' => true,
 						'httponly' => true,
 						'samesite' => 'Lax'
 					]);
@@ -63,7 +64,9 @@
 				http_response_code(401);
 				echo json_encode([
 					"error" => "Authentification échouée",
-					"exception" => $e->getMessage()
+					"exception" => $e->getMessage(),
+					"trace" => $e->getTraceAsString(),
+					"token" => $idToken
 				]);
 			}
 		}

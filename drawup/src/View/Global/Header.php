@@ -17,6 +17,10 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+		<script>
+			BASE_URL = '<?php echo BASE_URL ?>';
+		</script>
 	</head>
 
 	<body>

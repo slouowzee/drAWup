@@ -1,13 +1,21 @@
 async function handleCredentialResponse(response) {
+	if (typeof BASE_URL === 'undefined') {
+		console.error('La constante BASE_URL n\'est pas définie. La redirection des boutons peut ne pas fonctionner correctement.');
+		window.BASE_URL = 'https://assured-concise-ladybird.ngrok-free.app/drawup_demo/drawup';
+	}
+
 	const credential = response.credential;
 
 	try {
-		const res = await fetch('http://localhost/drawup_demo/api_drawup/api/user/login', {
+		const baseUrl = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+		const res = await fetch(`${baseUrl.replace('/drawup_demo/drawup', '')}/drawup_demo/api_drawup/api/user/login`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ credential })
 		});
+		console.log("ID Token Google reçu :", credential);
+
 
 		const contentType = res.headers.get("content-type");
 		if (!contentType || !contentType.includes("application/json")) {
@@ -15,13 +23,16 @@ async function handleCredentialResponse(response) {
 		}
 
 		const data = await res.json();
+		console.log("Erreur auth détaillée :", data);
 		console.log("Réponse de l'API :", data);
 
 		if (res.ok && data.success) {
 			console.log("Connecté:", data.user.name);
-			window.location.href = "http://localhost/drawup_demo/drawup/pannel";
+			const baseUrl = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+			window.location.href = `${baseUrl}/pannel`;
 		} else if (data.redirect === "/wait") {
-			window.location.href = "http://localhost/drawup_demo/drawup/wait";
+			const baseUrl = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+			window.location.href = `${baseUrl}/wait`;
 		} else {
 			console.error("Erreur API :", data.error || "Réponse inattendue");
 			alert("Erreur de connexion : " + (data.error || "inconnue"));

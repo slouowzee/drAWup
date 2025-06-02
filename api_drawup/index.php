@@ -7,10 +7,11 @@
 
 
 	$allowedOrigins = [
-		"http://localhost",
-		"http://localhost/drawup_demo",
-		"http://localhost/drawup_demo/drawup"
+		"https://assured-concise-ladybird.ngrok-free.app",
+		"https://assured-concise-ladybird.ngrok-free.app/drawup_demo",
+		"https://assured-concise-ladybird.ngrok-free.app/drawup_demo/drawup"
 	];
+
 
 
 	$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -23,6 +24,7 @@
 	header("Access-Control-Allow-Methods: POST, OPTIONS");
 	header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
+	header('Content-Type: application/json');
 
 	if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 		http_response_code(204);

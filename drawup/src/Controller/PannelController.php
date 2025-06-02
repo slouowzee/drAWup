@@ -1,9 +1,15 @@
 <?php
 	namespace Controller;
+	use Core\Session;
 
 	class PannelController {
+		private function set_session() {
+			$Session = new Session();
+			$Session->session_start_if_not_started();
+		}
+
 		public function showWelcomePannel() {
-			require_once __DIR__ . "/../Core/Session.php";
+			$this->set_session();
 
 			require_once __DIR__ . "/../View/Global/Header.php";
 			require_once __DIR__ . "/../View/Global/Navbar.php";
@@ -12,7 +18,12 @@
 		}
 
 		public function showLibPannel() {
-			require_once __DIR__ . "/../Core/Session.php";
+			$this->set_session();
+
+			require_once __DIR__ . "/../View/Global/Header.php";
+			require_once __DIR__ . "/../View/Global/Navbar.php";
+			require_once __DIR__ . "/../View/Sample/LibPannel.php";
+			require_once __DIR__ . "/../View/Global/Footer.php";
 
 			require_once __DIR__ . "/../View/Global/Header.php";
 			require_once __DIR__ . "/../View/Global/Navbar.php";
@@ -21,7 +32,7 @@
 		}
 
 		public function showNewDocPannel() {
-			require_once __DIR__ . "/../Core/Session.php";
+			$this->set_session();
 
 			require_once __DIR__ . "/../View/Global/Header.php";
 			require_once __DIR__ . "/../View/Global/Navbar.php";
@@ -30,7 +41,7 @@
 		}
 
 		public function showClientPannel() {
-			require_once __DIR__ . "/../Core/Session.php";
+			$this->set_session();
 
 			require_once __DIR__ . "/../View/Global/Header.php";
 			require_once __DIR__ . "/../View/Global/Navbar.php";
@@ -40,11 +51,11 @@
 
 		public function showEditClientPannel($id = null) {
 			//rajouter vérif si client existe toujours
-			require_once __DIR__ . "/../Core/Session.php";
+			$this->set_session();
 
 			require_once __DIR__ . "/../View/Global/Header.php";
 			require_once __DIR__ . "/../View/Global/Navbar.php";
-			require_once __DIR__ . "/../View/Sample/AddClientPannel.php";
+			require_once __DIR__ . "/../View/Sample/EditClientPannel.php";
 			require_once __DIR__ . "/../View/Global/Footer.php";
 		}
 
@@ -60,19 +71,15 @@
 		
 		$response = curl_exec($ch);
 		
-		// Vérifier s'il y a des erreurs
 		if (curl_errno($ch)) {
 			curl_close($ch);
 			return null;
 		}
 		
-		// Fermer la session cURL
 		curl_close($ch);
 		
-		// Décoder la réponse JSON
 		$client = json_decode($response, true);
 		
-		// Vérifier si la réponse est valide
 		if (!$client || isset($client['error'])) {
 			return null;
 		}

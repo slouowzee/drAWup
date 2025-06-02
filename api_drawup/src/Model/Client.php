@@ -42,7 +42,7 @@
 			}
 		}
 
-		public function deleteClient($clientId) {
+		public function deleteClientByID($clientId) {
 			// try {
 			// 	$stmt = $this->db->prepare("DELETE FROM client WHERE IDCLI = :clientId");
 			// 	$stmt->bindParam(':clientId', $clientId, PDO::PARAM_INT);

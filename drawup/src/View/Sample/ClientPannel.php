@@ -87,7 +87,6 @@
 		</template>
 		</section>
 		<script>
-			// Définir BASE_URL pour le JavaScript
 			const BASE_URL = '<?= BASE_URL ?>';
 		</script>
 		<script type="module" src="<?= BASE_URL . 'src/View/Public/JS/loadClient.js'?>"></script>

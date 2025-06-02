@@ -637,7 +637,8 @@ html, body {
 		flex-wrap: wrap;
 		justify-content: center;
 	}
-		.pannel__navbar {
+
+	.pannel__navbar {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -809,6 +810,7 @@ html, body {
 			transform: translateX(-50%);
 		}
 	}
+	
 	.theme__toggle-mobile:hover {
 		background-color: var(--color-element-blur);
 		color: var(--color-element);

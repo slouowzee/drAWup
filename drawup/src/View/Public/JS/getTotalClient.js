@@ -1,6 +1,6 @@
 async function getTotalClient() {
 	try {
-		const res = await fetch('http://localhost/drawup_demo/api_drawup/api/client/total', {
+		const res = await fetch('https://assured-concise-ladybird.ngrok-free.app/drawup_demo/api_drawup/api/client/total', {
 			method: 'GET',
 			credentials: 'include',
 			headers: { 'Content-Type': 'application/json' }

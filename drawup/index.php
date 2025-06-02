@@ -5,7 +5,7 @@
 
 	$routeur = new Routeur();
 
-	define('BASE_URL', 'http://localhost/drawup_demo/drawup/');
+	define('BASE_URL', 'https://assured-concise-ladybird.ngrok-free.app/drawup_demo/drawup/');
 
 	// Connexion
 	$routeur->get('', 'user', 'login');

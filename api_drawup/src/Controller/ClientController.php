@@ -62,7 +62,7 @@
 			}
 		}
 
-		public function deleteClient() {
+		public function deleteClientByID() {
 			// $clientId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 			// if ($clientId <= 0) {
@@ -95,7 +95,9 @@
 			// 		"error" => "Erreur lors de la suppression du client: " . $e->getMessage()
 			// 	]);
 			// }
-		}		public function getAllClient() {
+		}
+		
+		public function getAllClient() {
 			try {
 				$clients = $this->clientModel->getAllClients();
 				

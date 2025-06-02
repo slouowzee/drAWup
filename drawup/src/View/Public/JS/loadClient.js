@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
 	if (typeof BASE_URL === 'undefined') {
 		console.error('La constante BASE_URL n\'est pas définie. La redirection des boutons peut ne pas fonctionner correctement.');
-		window.BASE_URL = 'http://localhost/drawup_demo/drawup';
+		window.BASE_URL = 'https://assured-concise-ladybird.ngrok-free.app/drawup_demo/drawup';
 	}
+	
 	$("#clientTable").tablesorter({
 		theme: 'default',
 		widgets: ['zebra'],
@@ -14,13 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	let currentPage = 1;
-	let itemsPerPage = 10; // Nombre d'éléments par page, valeur par défaut
+	let itemsPerPage = 10; // Valeur par défaut
 	let totalClients = 0;
 	let allClients = [];
 	
 	async function loadClients() {
 		try {
-			const response = await fetch('http://localhost/drawup_demo/api_drawup/api/client/all', {
+			const response = await fetch('https://assured-concise-ladybird.ngrok-free.app/drawup_demo/api_drawup/api/client/all', {
 				method: 'GET',
 				credentials: 'include',
 				headers: { 'Content-Type': 'application/json' }
@@ -60,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		const end = start + itemsPerPage;
 		const clientsToDisplay = allClients.slice(start, end);
 		
-		// Vider le corps du tableau
 		const tbody = document.getElementById('clientTableBody');
 		tbody.innerHTML = '';
 		
@@ -112,16 +112,22 @@ document.addEventListener('DOMContentLoaded', function() {
 			} else if (logoContainer) {
 				const placeholder = document.createElement('div');
 				placeholder.className = 'client-logo-placeholder';
-				placeholder.innerHTML = '<i class="fas fa-building"></i>';
+				placeholder.innerHTML = '<p>logo non disponible</p>';
 				logoContainer.appendChild(placeholder);
 			}
 			
 			const editBtn = clone.querySelector('.btn-edit');
 			if (editBtn) {
-			editBtn.addEventListener('click', () => {
-				const baseUrl = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
-				window.location.href = `${baseUrl}/pannel/client/${client.IDCLI}`;
-			});
+				editBtn.addEventListener('click', () => {
+					sessionStorage.setItem('editClientData', JSON.stringify({
+						id: client.IDCLI,
+						name: client.NOMCLI,
+						logo: client.LOGOCLI
+					}));
+					console.log(`Navigating to edit client: ${client.NOMCLI}`);
+					const baseUrl = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
+					window.location.href = `${baseUrl}/pannel/client/${client.IDCLI}`;
+				});
 			}
 			
 			tbody.appendChild(clone);
@@ -210,5 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			updatePaginationButtons();
 		}
 	});
+
 	loadClients();
 });
