@@ -59,6 +59,15 @@
 			require_once __DIR__ . "/../View/Global/Footer.php";
 		}
 
+		public function showAddClientPannel() {
+			$this->set_session();
+
+			require_once __DIR__ . "/../View/Global/Header.php";
+			require_once __DIR__ . "/../View/Global/Navbar.php";
+			require_once __DIR__ . "/../View/Sample/AddClientPannel.php";
+			require_once __DIR__ . "/../View/Global/Footer.php";
+		}
+
 		private function fetchClientFromAPI($id) {
 		$apiUrl = "http://localhost/drawup_demo/drawup/api/client/" . $id;
 		

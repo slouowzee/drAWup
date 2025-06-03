@@ -1,5 +1,5 @@
 /* * ------------------------------------ * */
-/**       Page Édition Client
+/**      Page Ajout Client
 /* * ------------------------------------ * */
 
 /* Animations et effets */
@@ -14,8 +14,8 @@
     }
 }
 
-/* Header de la page d"édition */
-.pannel__edit-client-header {
+/* Header de la page d'ajout */
+.pannel__add-client-header {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -23,7 +23,7 @@
     animation: fadeIn 0.5s ease-out forwards;
 }
 
-.pannel__edit-client-title {
+.pannel__add-client-title {
     font-size: 1.8rem;
     color: var(--color-text-bright);
     font-weight: 600;
@@ -31,8 +31,8 @@
     padding-bottom: 0.5rem;
 }
 
-.pannel__edit-client-title::after {
-    content: "";
+.pannel__add-client-title::after {
+    content: '';
     position: absolute;
     bottom: 0;
     left: 0;
@@ -42,7 +42,7 @@
     border-radius: 2px;
 }
 
-.pannel__edit-client-back-button {
+.pannel__add-client-back-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -57,20 +57,20 @@
     box-shadow: var(--shadow-sm);
 }
 
-.pannel__edit-client-back-button:hover {
+.pannel__add-client-back-button:hover {
     background-color: var(--color-element-blur);
     transform: scale(1.05);
     box-shadow: var(--shadow-md);
     color: var(--color-element);
 }
 
-.pannel__edit-client-back-button:active {
+.pannel__add-client-back-button:active {
     transform: scale(0.95);
     transition-duration: 0.1s;
 }
 
 /* Style du formulaire */
-.pannel__edit-client-form {
+.pannel__add-client-form {
     background-color: var(--color-bg-sub);
     border-radius: var(--corner-xl);
     padding: 1.5rem;
@@ -83,8 +83,8 @@
     opacity: 0;
 }
 
-.pannel__edit-client-form::before {
-    content: "";
+.pannel__add-client-form::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -94,89 +94,13 @@
     z-index: 1;
 }
 
-.pannel__edit-client-form-grid {
+.pannel__add-client-form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
 }
 
-/* Style des groupes de champs */
-.form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 0.5rem;
-}
-
-.form-group.full-width {
-    grid-column: 1 / -1;
-}
-
-.form-group label {
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-text-bright);
-}
-
-.form-group label i {
-    color: var(--color-element);
-}
-
-.form-control {
-    padding: 0.8rem 1rem;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: var(--corner-sm);
-    background-color: var(--color-bg);
-    color: var(--color-text-bright);
-    font-size: 1rem;
-    transition: all 0.3s ease, background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease, transform 0.2s ease;
-    max-width: 100%; /* Empêcher le débordement */
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: var(--color-element);
-    box-shadow: 0 0 0 2px rgba(229, 87, 30, 0.2);
-    transform: translateY(-1px);
-    background-color: var(--color-bg);
-}
-
-.form-control--error {
-    border-color: var(--color-error, #dc3545) !important;
-    background-color: rgba(220, 53, 69, 0.05);
-}
-
-.form-control--error:focus {
-    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2) !important;
-}
-
-.form-error-message {
-    color: var(--color-error, #dc3545);
-    font-size: 0.8rem;
-    margin-top: 0.3rem;
-    display: block;
-    transition: all 0.3s ease;
-    animation: fadeIn 0.3s ease-out;
-}
-
-.form-control::placeholder {
-    color: var(--color-text-dark);
-    opacity: 0.5;
-}
-
-textarea.form-control {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.form-text {
-    font-size: 0.8rem;
-    color: var(--color-text-dark);
-    margin-top: 0.5rem;
-}
-
+/* Style des groupes de champs (réutilise les styles du edit-client) */
 /* Style de prévisualisation du logo */
 .logo-preview {
     margin-top: 1rem;
@@ -246,7 +170,7 @@ textarea.form-control {
 }
 
 /* Style du bouton de sauvegarde */
-.pannel__edit-client-footer {
+.pannel__add-client-footer {
     display: flex;
     justify-content: flex-end;
     margin-top: 2rem;
@@ -255,7 +179,7 @@ textarea.form-control {
     position: relative; /* Pour le positionnement sur mobile */
 }
 
-.pannel__edit-client-save-button {
+.pannel__add-client-save-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -276,8 +200,8 @@ textarea.form-control {
     transition: all 0.3s ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.pannel__edit-client-save-button::before {
-    content: "";
+.pannel__add-client-save-button::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -287,35 +211,26 @@ textarea.form-control {
     z-index: -1;
 }
 
-.pannel__edit-client-save-button:hover {
+.pannel__add-client-save-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    background-color: #dd5422; /* Version légèrement plus foncée du orange */
+    background-color: #dd5422;
 }
 
 /* Adaptations pour le mode sombre */
-body.dark-theme .form-control {
-    background-color: var(--color-bg);
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-theme .form-control:focus {
-    border-color: var(--color-element);
-    box-shadow: 0 0 0 2px rgba(229, 87, 30, 0.3);
-}
-
-body.dark-theme .form-text {
-    color: rgba(255, 255, 255, 0.6);
+body.dark-theme .pannel__add-client-form {
+    background-color: var(--color-bg-sub);
+    box-shadow: var(--shadow);
 }
 
 /* Adaptations responsive */
 @media screen and (max-width: 768px) {
-    .pannel__edit-client-form-grid {
+    .pannel__add-client-form-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
     
-    .pannel__edit-client-form {
+    .pannel__add-client-form {
         padding: 1.2rem;
         width: 100%;
         border-radius: var(--corner-lg);
@@ -324,20 +239,20 @@ body.dark-theme .form-text {
         box-shadow: var(--shadow-md); /* Ombre plus prononcée sur mobile */
     }
     
-    .pannel__edit-client-title {
+    .pannel__add-client-title {
         font-size: 1.5rem;
         width: auto; /* Largeur automatique plutôt que 100% */
         margin-left: 0.5rem; /* Espace entre l'icône et le titre */
     }
     
-    .pannel__edit-client-header {
+    .pannel__add-client-header {
         flex-wrap: nowrap; /* Empêche le retour à la ligne */
         padding: 1.2rem 1rem 0 1rem; /* Plus de padding en haut */
         align-items: center;
         justify-content: flex-start;
     }
     
-    .pannel__edit-client-save-button {
+    .pannel__add-client-save-button {
         width: 100%;
         height: 56px;
         font-size: 1.1rem;
@@ -347,7 +262,7 @@ body.dark-theme .form-text {
         box-shadow: 0 4px 12px rgba(229, 87, 30, 0.2); /* Ombre colorée pour attirer l'attention */
     }
     
-    .pannel__edit-client-footer {
+    .pannel__add-client-footer {
         padding: 0.8rem 1rem;
         width: 100%;
         margin-top: 1.5rem; /* Plus d'espace au-dessus du bouton sur mobile */
@@ -411,7 +326,7 @@ body.dark-theme .form-text {
     }
     
     /* Amélioration du bouton retour sur mobile */
-    .pannel__edit-client-back-button {
+    .pannel__add-client-back-button {
         width: 42px;
         height: 42px;
         font-size: 1.2rem;
@@ -422,17 +337,17 @@ body.dark-theme .form-text {
 
 /* Adaptations pour les très petits écrans */
 @media screen and (max-width: 480px) {
-    .pannel__edit-client-form {
+    .pannel__add-client-form {
         padding: 1rem;
         border-radius: var(--corner-md);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Ombre plus prononcée sur petit écran */
     }
     
-    .pannel__edit-client-header {
+    .pannel__add-client-header {
         padding: 1.5rem 1rem 0 1rem; /* Encore plus de padding en haut pour les petits écrans */
     }
     
-    .pannel__edit-client-title {
+    .pannel__add-client-title {
         font-size: 1.3rem;
     }
     
@@ -450,8 +365,8 @@ body.dark-theme .form-text {
     }
     
     /* Améliorer accessibilité tactile */
-    .pannel__edit-client-back-button,
-    .pannel__edit-client-save-button {
+    .pannel__add-client-back-button,
+    .pannel__add-client-save-button {
         min-height: 48px; /* Taille minimale recommandée pour boutons tactiles */
     }
     
@@ -469,7 +384,7 @@ body.dark-theme .form-text {
     
     /* Ajustement pour les petits écrans en mode portrait */
     @media (max-height: 700px) {
-        .pannel__edit-client-form {
+        .pannel__add-client-form {
             padding: 0.8rem;
         }
         
@@ -481,7 +396,7 @@ body.dark-theme .form-text {
             padding: 0.7rem;
         }
         
-        .pannel__edit-client-footer {
+        .pannel__add-client-footer {
             margin-top: 1rem;
         }
     }

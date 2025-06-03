@@ -2,12 +2,13 @@
 			<div class="pannel__content-header" style="display: flex; align-items: center; gap: 1rem;">
 				<h1 class="pannel__content-title">Liste des clients</h1>
 			</div>
+			<div class="pannel__content-title-underline"></div>
 			
 			<div class="pannel__content-all">
 				<div class="pannel__content-table-container">
 					<div class="pannel__content-table-actions">
 						<div class="pannel__content-table-actions-left">
-							<a href="<?= BASE_URL . 'pannel/client/add' ?>" class="pannel__content-add-button" title="Ajouter un client">
+							<a href="<?= BASE_URL . 'pannel/client/add'?>" class="pannel__content-add-button" title="Ajouter un client">
 								<span class="bg-gradient"></span>
 								Ajouter un client
 							</a>

@@ -2,6 +2,66 @@
 /** 	         Pannel Client
 /* * ------------------------------------ * */
 
+/* Animation d'apparition pour le contenu */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+.pannel__content {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.pannel__content.fade-out {
+    animation: fadeOut 0.3s ease-in forwards;
+}
+
+.pannel__return-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--color-bg-sub);
+    color: var(--color-text-bright);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.pannel__return-button:hover {
+    background-color: var(--color-element-blur);
+    transform: scale(1.05);
+}
+
+.pannel__content-title-underline {
+    width: 80px;
+    height: 3px;
+    background: var(--color-element);
+    margin: 0.5rem 0 1.5rem 0.8rem;
+    border-radius: 2px;
+}
+
 .pannel__content-table-container {
 	background-color: var(--color-bg-sub);
 	border-radius: var(--corner-xl);
@@ -13,9 +73,27 @@
 	max-width: 87.5rem;
 	margin: 1rem auto;
 	overflow: hidden;
+	position: relative;
 	transition:
 		background-color var(--transition-speed) ease,
-		box-shadow var(--transition-speed) ease;
+		box-shadow var(--transition-speed) ease,
+		transform 0.3s ease;
+}
+
+.pannel__content-table-container::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background: linear-gradient(90deg, var(--color-element), var(--color-text-dark));
+	z-index: 1;
+}
+
+.pannel__content-table-container:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .pannel__content-table-actions {
@@ -833,7 +911,9 @@ body.dark-theme .pannel__content-items-per-page-label {
 		margin: 0;
 		width: 100%;
 		overflow-x: auto;
+		overflow-y: hidden; /* Supprimer le scroll vertical */
 		-webkit-overflow-scrolling: touch;
+		max-height: none; /* Enlever la hauteur max qui cause le scroll vertical */
 	}
 	
 	#clientTable {
@@ -866,12 +946,20 @@ body.dark-theme .pannel__content-items-per-page-label {
 		padding: 0 1.2rem;
 		font-size: 0.95rem;
 	}
-		.pannel__content-table-pagination {
+	
+	.pannel__content-table-pagination {
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		gap: 1rem;
 		margin-top: 1.5rem;
+	}
+	
+	.pannel__content-pagination-left {
+		display: flex;
+		justify-content: center; /* Centrer les chevrons */
+		align-items: center;
+		width: 100%;
 	}
 	
 	.btn-edit {
@@ -1008,7 +1096,7 @@ body.dark-theme .pannel__content-items-per-page-label {
 		width: 45px;
 		height: 45px;
 		font-size: 1.5rem;
-		margin: 0;
+		margin: 0 2px; /* Espace entre les boutons */
 		padding: 0;
 		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 	}
@@ -1018,11 +1106,19 @@ body.dark-theme .pannel__content-items-per-page-label {
 		font-weight: 600;
 		font-size: 1.1rem;
 		margin: 0;
+		text-align: center; /* Centrer le texte de la pagination */
 	}
 	
 	.pannel__content-pagination-left,
 	.pannel__content-pagination-right {
 		display: flex;
 		align-items: center;
+		justify-content: center; /* Centrer les éléments */
+	}
+	
+	#firstPage, #prevPage, #nextPage, #lastPage {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 }

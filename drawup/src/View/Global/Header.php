@@ -21,6 +21,7 @@
 		<script>
 			BASE_URL = '<?php echo BASE_URL ?>';
 		</script>
+		<script type="module" src="<?= BASE_URL . 'src/View/Public/JS/panelAnimations.js'?>"></script>
 	</head>
 
 	<body>

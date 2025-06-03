@@ -4,6 +4,7 @@
 
 @import url("./var.css");
 @import url("./reset.css");
+@import url("./transitions.css");
 
 
 
@@ -16,3 +17,5 @@
 @import url("./page/pannel.css");
 @import url("./page/client.css");
 @import url("./page/editClient.css");
+@import url("./page/addClient.css");
+@import url("./page/notifications.css");

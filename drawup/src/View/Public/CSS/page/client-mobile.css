@@ -1,0 +1,92 @@
+/* * ------------------------------------ * */
+/**      Améliorations Mobile - Client
+/* * ------------------------------------ * */
+
+@media screen and (max-width: 991px) {
+    /* Table horizontally scrollable, but no vertical scrolling */
+    .pannel__content-table-wrapper {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 1rem;
+    }
+    
+    /* Center pagination controls */
+    .pannel__content-pagination-left {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    /* Make chevrons more accessible */
+    .pannel__content-pagination-btn {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Increase space between pagination elements */
+    .pannel__content-pagination-info {
+        margin: 0 10px;
+        min-width: 120px;
+        text-align: center;
+    }
+    
+    /* Items per page selector adjustments */
+    .pannel__content-pagination-right {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 12px;
+    }
+    
+    /* Mobile-friendly table structure */
+    .pannel__content-table {
+        min-width: 600px; /* Prevent table from getting too narrow */
+        margin-bottom: 0;
+    }
+    
+    /* Better spacing for mobile buttons */
+    .pannel__content-table-actions {
+        padding: 0.5rem 0;
+    }
+    
+    /* Ensure search box takes up appropriate space */
+    .pannel__content-table-actions-right {
+        flex-grow: 1;
+        justify-content: flex-end;
+    }
+    
+    .pannel__content-search {
+        flex-grow: 1;
+        max-width: 100%;
+    }
+    
+    /* Adjust add button */
+    .pannel__content-table-actions-left {
+        width: 100%;
+    }
+    
+    .pannel__content-add-button {
+        width: 100%;
+    }
+    
+    /* Adjust search input on smaller screens */
+    @media screen and (max-width: 576px) {
+        .pannel__content-search {
+            flex-grow: 1;
+        }
+        
+        .pannel__content-search-input {
+            min-width: 0;
+            width: 100%;
+        }
+        
+        .pannel__content-table-actions-right {
+            width: 100%;
+        }
+    }
+}

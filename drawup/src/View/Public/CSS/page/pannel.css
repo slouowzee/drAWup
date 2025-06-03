@@ -439,6 +439,7 @@ html, body {
 	max-width: 160px;
 	height: auto;
 	transition: all var(--transition-speed) ease;
+	overflow: hidden;
 }
 
 .pannel__navbar.collapsed .navbar__logo {
