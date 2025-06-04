@@ -3,6 +3,7 @@
 				<button class="pannel__add-client-back-button" aria-label="Retour à la page précédente"><i class="fas fa-arrow-left"></i></button>
 				<h2 class="pannel__add-client-title">Ajouter un nouveau client</h2>
 			</div>
+
 			<form id="addClientForm" class="pannel__add-client-form" aria-label="Formulaire d'ajout client">
 				<div class="pannel__add-client-form-grid">
 					<div class="form-group">
@@ -37,13 +38,11 @@
 					</div>
 				</div>
 			</form>	
+
 			<div class="pannel__add-client-footer">
 				<button id="client-save" class="pannel__add-client-save-button" aria-label="Enregistrer le nouveau client">
 					<i class="fas fa-plus-circle"></i> Ajouter
 				</button>
 			</div>
 		</section>
-		<script>
-			const BASE_URL = '<?= BASE_URL ?>';
-		</script>
 		<script type="module" src="<?= BASE_URL . 'src/View/Public/JS/addClient.js'?>"></script>

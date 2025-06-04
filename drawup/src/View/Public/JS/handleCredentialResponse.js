@@ -23,7 +23,6 @@ async function handleCredentialResponse(response) {
 		}
 
 		const data = await res.json();
-		console.log("Erreur auth détaillée :", data);
 		console.log("Réponse de l'API :", data);
 
 		if (res.ok && data.success) {

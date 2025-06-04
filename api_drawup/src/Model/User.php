@@ -13,6 +13,13 @@
 			$this->db = Database::getConnection();
 		}
 
+		/**
+		 * Récupère un utilisateur par son email et son nom.
+		 *
+		 * @param string $email L'email de l'utilisateur.
+		 * @param string $name Le nom de l'utilisateur.
+		 * @return array|null Les informations de l'utilisateur ou null en cas d'erreur.
+		 */
 		public function findOrCreate($email, $name) {
 			try {
 				$stmt = $this->db->prepare("SELECT IDUTIL as id, NOMUTIL as name, EMAILUTIL as email, ACTIFUTIL as valid FROM utilisateur WHERE EMAILUTIL = ?");

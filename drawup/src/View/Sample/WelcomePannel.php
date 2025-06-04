@@ -5,6 +5,7 @@
 					<?php endif; ?>
 					<h1 class="pannel__content-title">Bienvenue <?= htmlspecialchars($_SESSION['user_name']) ?> !</h1>
 				</div>
+
 				<div class="pannel__content-all">
 					<div class="pannel__content-quick-actions">
 						<h2 class="pannel__content-quick-actions-title">Quelques petites actions rapide ?</h2>
@@ -13,7 +14,7 @@
 							<h3 class="pannel__content-quick-actions-separator-title">Client</h3>
 							<hr class="pannel__content-quick-actions-separator"/>
 							
-							<a href="<?= BASE_URL . '' ?>" class="pannel__content-quick-actions-item-create">
+							<a href="<?= BASE_URL . '/pannel/client/add' ?>" class="pannel__content-quick-actions-item-create">
 								<span class="bg-gradient"></span>
 								Ajouter un client
 							</a>
@@ -25,7 +26,7 @@
 							<h3 class="pannel__content-quick-actions-separator-title">Article</h3>
 							<hr class="pannel__content-quick-actions-separator"/>
 
-							<a href="<?= BASE_URL . '' ?>" class="pannel__content-quick-actions-item-create">
+							<a href="<?= BASE_URL . '/pannel/article/add' ?>" class="pannel__content-quick-actions-item-create">
 								<span class="bg-gradient"></span>
 								Créer un article
 							</a>
@@ -35,6 +36,7 @@
 							</a> 
 						</div>
 					</div>
+
 					<div class="pannel__content-stats">
 						<h3 class="pannel__content-stats-title">Statistiques</h3>
 						<div class="pannel__content-stats-item">
@@ -46,6 +48,7 @@
 							<span class="pannel__content-stats-item-value" id="totalArticles">...</span>
 						</div>
 					</div>
+
 					<div class="pannel__content-more-info">
 						<div class="pannel__content-more-info-user">
 							<div class="pannel__content-more-info-user-info">
@@ -68,4 +71,3 @@
 			</section>
 			<script src="<?= BASE_URL . 'src/View/Public/JS/getTotalClient.js'?>"></script>
 			<script src="<?= BASE_URL . 'src/View/Public/JS/getTotalArticle.js'?>"></script>
-			

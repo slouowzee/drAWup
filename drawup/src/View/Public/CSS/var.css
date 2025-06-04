@@ -9,8 +9,8 @@
 	--color-text-dark: #2e2e2e;
 	--color-element-blur: rgba(229, 87, 30, 0.15);
 	--color-element: #E5571E;
-	--color-element-hover: #dd5422; /* Couleur d'élément au survol */
-	--color-element-active: #c84c1f; /* Couleur d'élément à l'état actif */
+	--color-element-hover: #dd5422;
+	--color-element-active: #c84c1f;
 
 	--shadow: 0 0px 15px rgba(0, 0, 0, 0.4);
 	--shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -30,7 +30,6 @@
 	--transition-speed-slow: 0.5s;
 	--transition-speed-span: 0.12s;
 	
-	/* Couleurs pour les états des éléments */
 	--color-success: #28a745;
 	--color-error: #dc3545;
 	--color-warning: #ffc107;

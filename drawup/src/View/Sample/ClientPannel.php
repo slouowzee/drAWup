@@ -13,6 +13,7 @@
 								Ajouter un client
 							</a>
 						</div>
+						
 						<div class="pannel__content-table-actions-right">
 							<button id="reset-search" class="pannel__content-reset-button" title="Réinitialiser la recherche">
 								<i class="fas fa-undo"></i>
@@ -22,7 +23,8 @@
 								<button class="pannel__content-search-button"><i class="fas fa-search"></i></button>
 							</div>
 						</div>
-					</div>	
+					</div>
+
 					<div class="pannel__content-table-wrapper">
 						<table id="clientTable" class="pannel__content-table tablesorter">
 							<thead>
@@ -44,7 +46,8 @@
 								</tr>
 							</tbody>
 						</table>
-					</div>	
+					</div>
+
 					<div class="pannel__content-table-pagination">
 						<div class="pannel__content-pagination-left">
 							<button id="firstPage" class="pannel__content-pagination-btn" disabled title="Première page"><i class="fas fa-angle-double-left"></i></button>
@@ -53,6 +56,7 @@
 							<button id="nextPage" class="pannel__content-pagination-btn" disabled title="Page suivante"><i class="fas fa-chevron-right"></i></button>
 							<button id="lastPage" class="pannel__content-pagination-btn" disabled title="Dernière page"><i class="fas fa-angle-double-right"></i></button>
 						</div>
+
 						<div class="pannel__content-pagination-right">
 							<div class="pannel__content-items-per-page">
 								<select id="items-per-page" class="pannel__content-items-per-page-select" title="Éléments par page">
@@ -85,9 +89,6 @@
 						<button class="btn-edit" title="Modifier"><i class="fas fa-edit"></i></button>
 					</td>
 				</tr>
-		</template>
+			</template>
 		</section>
-		<script>
-			const BASE_URL = '<?= BASE_URL ?>';
-		</script>
 		<script type="module" src="<?= BASE_URL . 'src/View/Public/JS/loadClient.js'?>"></script>

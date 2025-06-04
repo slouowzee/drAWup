@@ -12,6 +12,11 @@
 			$this->db = Database::getConnection();
 		}
 
+		/**
+		 * Récupère tous les articles.
+		 *
+		 * @return array
+		 */
 		public function getTotalArticle() {
 			try {
 				$stmt = $this->db->prepare("SELECT COUNT(*) as total FROM article");
@@ -20,7 +25,7 @@
 				return $result['total'] ?? 0;
 			} catch (PDOException $e) {
 				error_log("Database error: " . $e->getMessage());
-				return 0;
+				return [];
 			}
 		}
 	}

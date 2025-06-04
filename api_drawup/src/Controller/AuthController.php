@@ -6,6 +6,14 @@
 	use Model\User;
 
 	class AuthController {
+
+		/**
+		 * Authentifie un utilisateur via Google OAuth2.
+		 * Cette méthode attend un ID Token dans le corps de la requête.
+		 * 
+		 * @throws \Exception Si le token est invalide ou manquant
+		 * @return void
+		 */
 		public function googleLogin() {
 			$input = json_decode(file_get_contents("php://input"), true);
 			$idToken = $input['credential'] ?? null;

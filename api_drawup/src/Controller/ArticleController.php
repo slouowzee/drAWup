@@ -10,6 +10,11 @@
 			$this->articleModel = new Article();
 		}
 
+		/**
+		 * Récupère le nombre total d'articles.
+		 * 
+		 * @return void
+		 */
 		public function getTotalArticle() {
 			try {
 				$total = $this->articleModel->getTotalArticle();

@@ -3,33 +3,47 @@
 	namespace Core;
 
 	class Session {
-		function session_start_if_not_started() {
-			if (session_status() === PHP_SESSION_NONE) {
-				session_set_cookie_params([
-					'lifetime' => 0,
-					'path' => '/',
-					'domain' => 'assured-concise-ladybird.ngrok-free.app',
-					'secure' => true,
-					'httponly' => true,
-					'samesite' => 'Lax'
-				]);
-				session_start();
+
+		/**
+		 * Checks si la session est valide afin de s'assurer que l'utilisateur a le droit d'accéder aux pages critiques
+		 * 
+		 * @return boolean True si la session est valide, false sinon
+		 */
+		function session_check_if_valid($session) {
+			if ($session == array() || !isset($session['user_name']) || !isset($session['user_email']) || !isset($session['user_picture']) || !isset($session['user_id']) || (!isset($session['user_valid'])) || $session['user_valid'] !== 1) {
+				return false;
 			}
+			return true;
 		}
 
-		function session_destroy_if_started() {
+		/**
+		 * Détruis la session en cours et supprime les cookies associés piour éviter les problèmes de sécurité
+		 * 
+		 * @return boolean session_destroy() si la session a été détruite avec succès, false sinon
+		 */
+		public function logout() {
 			if (session_status() === PHP_SESSION_ACTIVE) {
 				$_SESSION = array();
-
+				
 				if (ini_get("session.use_cookies")) {
 					$params = session_get_cookie_params();
-					setcookie(session_name(), '', time() - 42000,
-						$params["path"], $params["domain"],
-						$params["secure"], $params["httponly"]
+					setcookie(
+						session_name(),
+						'',
+						[
+							'expires' => time() - 42000,
+							'path' => $params["path"],
+							'domain' => $params["domain"],
+							'secure' => $params["secure"],
+							'httponly' => $params["httponly"],
+							'samesite' => 'Strict'
+						]
 					);
 				}
-
-				session_destroy();
+				
+				return session_destroy();
 			}
+			
+			return false;
 		}
 	}

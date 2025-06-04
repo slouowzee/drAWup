@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				logoImg.alt = `Logo de ${client.NOMCLI}`;
 				logoImg.className = 'client-logo-image';
 				logoContainer.appendChild(logoImg);
+				
 			} else if (logoContainer) {
 				const placeholder = document.createElement('div');
 				placeholder.className = 'client-logo-placeholder';
@@ -186,6 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		displayClients(currentPage);
 		updatePaginationButtons();
 	});
+	
 	document.getElementById('reset-search').addEventListener('click', function() {
 		document.getElementById('client-search').value = '';
 		loadClients();

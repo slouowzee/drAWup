@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 	const desktopBtn = document.querySelector(".theme__toggle");
 	const mobileBtn = document.querySelector(".theme__toggle-mobile");
-	const otherBtn = document.querySelector(".second__theme__toggle");
+	const otherBtn = document.querySelector(".second__theme__toggle"); // Bouton de la page connexion / wait
 
 	const updateIcons = () => {
 		const isDark = document.body.classList.contains("dark-theme");

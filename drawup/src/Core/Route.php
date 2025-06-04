@@ -5,6 +5,14 @@
 		public string $path, $httpMethod, $controller, $method;
 		public array $params = [];
 
+		/**
+		 * Constructeur de la classe Route.
+		 *
+		 * @param string $path Le chemin de la route, sans slash au début ni à la fin.
+		 * @param string $httpMethod La méthode HTTP (GET, POST, PUT, DELETE, etc.).
+		 * @param string $controller Le nom du contrôleur qui gérera cette route.
+		 * @param string $method Le nom de la méthode dans le contrôleur qui sera appelée pour cette route.
+		 */
 		public function __construct(string $path, string $httpMethod, string $controller, string $method) {
 			$this->path = trim($path, '/');
 			$this->httpMethod = strtoupper($httpMethod);
@@ -12,6 +20,13 @@
 			$this->method = $method;
 		}
 
+		/**
+		 * Vérifie si l'URI de la requête correspond à cette route.
+		 *
+		 * @param string $requestUri L'URI de la requête.
+		 * @param string $requestMethod La méthode HTTP de la requête.
+		 * @return bool True si la route correspond, sinon false.
+		 */
 		public function match(string $requestUri, string $requestMethod): bool {
 			if ($this->httpMethod !== $requestMethod) {
 				return false;
