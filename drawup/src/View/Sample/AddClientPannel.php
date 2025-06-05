@@ -24,7 +24,7 @@
 					</div>
 					<div class="form-group">
 						<label for="client-codepostal"><i class="fas fa-map-pin"></i> Code postal</label>
-						<input type="text" inputmode="numeric" pattern="[0-9]*" id="client-codepostal" name="client_codepostal" placeholder="Code postal du client" class="form-control" autocomplete="postal-code" maxlength="5">
+						<input type="text" id="client-codepostal" name="client_codepostal" placeholder="Code postal du client" class="form-control" autocomplete="postal-code">
 					</div>
 					<div class="form-group full-width">
 						<label for="client-logo"><i class="fas fa-image"></i> Logo du client</label>

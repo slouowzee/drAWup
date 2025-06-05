@@ -38,10 +38,16 @@
 			} elseif ($uri === '/api/client/all' && $method === 'GET') {
 				(new ClientController())->getAllClient();
 
+			} elseif ($uri === '/api/client' && $method === 'POST') {
+				(new ClientController())->addNewClient();
+				
+			} elseif ($uri === '/api/client/add' && $method === 'POST') {
+				(new ClientController())->addNewClient();
+
 			} elseif (preg_match("#^/api/client/(\d+)$#", $uri, $matches)) {
 				$clientId = $matches[1];
 				error_log("ClientID extrait: $clientId");
-                
+
 				if ($method === 'GET') {
 					(new ClientController())->getClientByID($clientId);
 				} else if ($method === 'POST' || $method === 'PUT') {
@@ -58,7 +64,7 @@
 
 			} else {
 				http_response_code(404);
-				echo json_encode(["error" => "Route non trouvée"]);
+				echo json_encode(["error" => "Route non trouvée: " . $uri]);
 			}
 		}
 	}

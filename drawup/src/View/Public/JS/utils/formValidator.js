@@ -34,15 +34,6 @@ const FormValidator = {
     },
     
     /**
-     * Vérifie si une valeur est un code postal français valide
-     * @param {string} value - Code postal à vérifier
-     * @return {boolean} - true si le code postal est valide
-     */
-    isPostalCode: function(value) {
-        return /^[0-9]{5}$/.test(value);
-    },
-    
-    /**
      * Vérifie si un fichier a un type MIME autorisé
      * @param {File} file - Fichier à vérifier
      * @param {Array} allowedTypes - Types MIME autorisés
@@ -83,17 +74,6 @@ const FormValidator = {
             errors: []
         };
         
-        // Validation du code postal (pas obligatoire, mais format spécifique si présent)
-        const codePostalInput = form.querySelector('#client-codepostal');
-        if (this.isNotEmpty(codePostalInput.value) && !this.isPostalCode(codePostalInput.value)) {
-            result.isValid = false;
-            result.errors.push('Le code postal doit comporter exactement 5 chiffres.');
-            codePostalInput.classList.add('form-control--error');
-        } else {
-            codePostalInput.classList.remove('form-control--error');
-        }
-        
-        // Validation du logo (pas obligatoire, mais format spécifique si présent)
         const logoInput = form.querySelector('#client-logo');
         if (logoInput.files && logoInput.files.length > 0) {
             const file = logoInput.files[0];
@@ -167,15 +147,11 @@ const FormValidator = {
             villeInput.classList.remove('form-control--error');
         }
         
-        // Validation du code postal (obligatoire + format spécifique)
+        // Validation du code postal (uniquement vérifier s'il est renseigné)
         const codePostalInput = form.querySelector('#client-codepostal');
         if (!this.isNotEmpty(codePostalInput.value)) {
             result.isValid = false;
             result.errors.push('Le code postal est obligatoire.');
-            codePostalInput.classList.add('form-control--error');
-        } else if (!this.isPostalCode(codePostalInput.value)) {
-            result.isValid = false;
-            result.errors.push('Le code postal doit comporter exactement 5 chiffres.');
             codePostalInput.classList.add('form-control--error');
         } else {
             codePostalInput.classList.remove('form-control--error');

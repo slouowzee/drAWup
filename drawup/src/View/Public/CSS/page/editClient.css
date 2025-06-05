@@ -234,7 +234,6 @@ textarea.form-control {
 }
 
 .logo-preview::before {
-    content: 'Aperçu du logo';
     position: absolute;
     color: var(--color-text-dark);
     opacity: 0.5;

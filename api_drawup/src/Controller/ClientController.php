@@ -33,39 +33,78 @@
 		}
 
 		/**
-		 * Ajoute un nouveau client.
-		 * 
-		 * @throws \Exception Si une erreur se produit lors de l'ajout du client.
-		 * @return void
+		 * Ajoute un nouveau client avec gestion du formulaire et des fichiers.
 		 */
 		public function addNewClient() {
-			$clientData = json_decode(file_get_contents('php://input'), true);
-
-			if (empty($clientData['lastName']) || empty($clientData['firstName']) || empty($clientData['address']) || empty($clientData['city']) || empty($clientData['postalCode']) || empty($clientData['logo']) || empty($clientData['contactLine'])) {
+			if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 				http_response_code(400);
-				echo json_encode([
-					"success" => false,
-					"error" => "Données client manquantes"
-				]);
+				echo json_encode(["success" => false, "error" => "Méthode HTTP non supportée"]);
 				return;
 			}
 
 			try {
+				// Debug des données reçues
+				error_log("=== DÉBUT addNewClient ===");
+				error_log("POST données: " . print_r($_POST, true));
+				error_log("FILES: " . print_r($_FILES, true));
+				
+				// Récupérer directement les données du formulaire
+				$nom = isset($_POST['client-nom']) ? trim($_POST['client-nom']) : null;
+				$prenom = isset($_POST['client-prenom']) ? trim($_POST['client-prenom']) : null;
+				$adresse = isset($_POST['client-adresse']) ? trim($_POST['client-adresse']) : null;
+				$ville = isset($_POST['client-ville']) ? trim($_POST['client-ville']) : null;
+				$codePostal = isset($_POST['client-codepostal']) ? trim($_POST['client-codepostal']) : null;
+				$description = isset($_POST['client-description']) ? trim($_POST['client-description']) : '';
+				
+				// Valider les champs obligatoires comme dans FormValidator
+				if (empty($nom)) throw new \Exception("Le nom du client est obligatoire");
+				if (empty($prenom)) throw new \Exception("Le prénom du client est obligatoire");
+				if (empty($adresse)) throw new \Exception("L'adresse du client est obligatoire");
+				if (empty($ville)) throw new \Exception("La ville du client est obligatoire");
+				if (empty($codePostal)) throw new \Exception("Le code postal est obligatoire");
+				// Ne pas exiger la description comme obligatoire
+				
+				// Création du tableau de données
+				$clientData = [
+					'lastName' => $nom,
+					'firstName' => $prenom,
+					'address' => $adresse,
+					'city' => $ville,
+					'postalCode' => $codePostal,
+					'contactLine' => $description
+				];
+				
+				error_log("Données à insérer: " . json_encode($clientData));
+				
+				// Traitement du logo si présent
+				if (isset($_FILES['client-logo']) && $_FILES['client-logo']['error'] === UPLOAD_ERR_OK) {
+					$logoTmpName = $_FILES['client-logo']['tmp_name'];
+					$logoContent = file_get_contents($logoTmpName);
+					
+					if ($logoContent !== false) {
+						$clientData['logo'] = $logoContent;
+						error_log("Logo traité, taille: " . strlen($logoContent) . " octets");
+					}
+				}
+				
+				// Appel du modèle pour ajouter le client
 				$clientId = $this->clientModel->addNewClient($clientData);
+				
 				if ($clientId) {
+					error_log("Client ajouté avec succès, ID: $clientId");
 					echo json_encode([
 						"success" => true,
 						"message" => "Client ajouté avec succès",
 						"clientId" => $clientId
 					]);
 				} else {
-					http_response_code(500);
-					echo json_encode([
-						"success" => false,
-						"error" => "Erreur lors de l'ajout du client"
-					]);
+					throw new \Exception("Échec de l'insertion en base de données");
 				}
+				
+				error_log("=== FIN addNewClient ===");
+				
 			} catch (\Exception $e) {
+				error_log("ERREUR dans addNewClient: " . $e->getMessage() . "\nTrace: " . $e->getTraceAsString());
 				http_response_code(500);
 				echo json_encode([
 					"success" => false,
@@ -186,7 +225,6 @@
 		 * Met à jour un client par son ID avec des données provenant d'un formulaire.
 		 * 
 		 * @param int $clientId L'ID du client à mettre à jour.
-		 * @param array $data Données du client (non utilisé car on utilise $_POST et $_FILES directement)
 		 * @return void
 		 */
 		public function updateClientByID($clientId) {
@@ -199,26 +237,13 @@
 				return;
 			}
 
-			// Debug détaillé des données reçues
-			error_log("MISE À JOUR CLIENT ID: " . $clientId);
-			error_log("Méthode HTTP: " . $_SERVER['REQUEST_METHOD']);
-			error_log("POST data: " . print_r($_POST, true));
-			error_log("FILES data: " . print_r($_FILES, true));
-			
-			// Vérifier si c'est une requête PUT simulée ou une simple requête POST
-			$isPut = isset($_POST['_method']) && $_POST['_method'] === 'PUT';
-
 			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				try {
-					// Récupérer les données actuelles du client
 					$existingClient = $this->clientModel->getClientByID($clientId);
 					if (!$existingClient) {
 						throw new \Exception('Client introuvable');
 					}
-					
-					error_log("Données client existantes: " . print_r($existingClient, true));
 
-					// Préparation des données avec contrôle strict
 					$clientData = [
 						'id' => (int)$clientId,
 						'nom' => $_POST['client-nom'] ?? $existingClient['NOMCLI'],
@@ -228,20 +253,52 @@
 						'codePostal' => $_POST['client-codepostal'] ?? $existingClient['CPCLI'],
 						'description' => $_POST['client-description'] ?? $existingClient['LIGNECONTACTCLI']
 					];
-					
-					error_log("Données préparées pour update: " . print_r($clientData, true));
-					
-					// Essai d'update simple
-					$updated = $this->clientModel->updateClientBasicInfo($clientData);
-					
+
+					$hasLogo = isset($_FILES['client-logo']) && 
+							$_FILES['client-logo']['error'] === UPLOAD_ERR_OK && 
+							$_FILES['client-logo']['size'] > 0;
+
+					if ($hasLogo) {
+						$logoTmpName = $_FILES['client-logo']['tmp_name'];
+						$logoSize = $_FILES['client-logo']['size'];
+						$logoName = $_FILES['client-logo']['name'];
+
+						error_log("Logo détecté: $logoName, taille: $logoSize octets");
+
+						// Vérifier le type de fichier
+						$fileInfo = new \finfo(FILEINFO_MIME_TYPE);
+						$mimeType = $fileInfo->file($logoTmpName);
+						error_log("Type MIME du logo: $mimeType");
+
+						$allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'];
+						if (!in_array($mimeType, $allowedTypes)) {
+							throw new \Exception("Type de fichier non autorisé: $mimeType. Utilisez JPG, PNG, GIF ou SVG.");
+						}
+
+						$maxSize = 2 * 1024 * 1024; // 2Mo
+						if ($logoSize > $maxSize) {
+							throw new \Exception("Le fichier est trop volumineux ($logoSize octets). Taille maximale: 2Mo.");
+						}
+
+						// Lire directement le contenu binaire du fichier
+						$logoContent = file_get_contents($logoTmpName);
+						if ($logoContent === false) {
+							throw new \Exception("Impossible de lire le contenu du fichier logo.");
+						}
+
+						error_log("Contenu du logo lu avec succès, taille: " . strlen($logoContent) . " octets");
+
+						$clientData['logo'] = $logoContent;
+					}
+
+					$updated = $this->clientModel->updateClientByID($clientData);
+
 					if ($updated) {
-						error_log("Mise à jour réussie");
 						echo json_encode([
 							"success" => true,
 							"message" => "Client mis à jour avec succès"
 						]);
 					} else {
-						error_log("Échec de la mise à jour");
 						http_response_code(500);
 						echo json_encode([
 							"success" => false,
@@ -249,7 +306,7 @@
 						]);
 					}
 				} catch (\Exception $e) {
-					error_log("Exception: " . $e->getMessage() . "\nTrace: " . $e->getTraceAsString());
+					error_log("Exception: " . $e->getMessage());
 					http_response_code(500);
 					echo json_encode([
 						"success" => false,

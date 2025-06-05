@@ -1,4 +1,4 @@
-		<section class="pannel__content">
+<section class="pannel__content">
 			<div class="pannel__edit-client-header">
 				<button class="pannel__edit-client-back-button" aria-label="Retour à la page précédente"><i class="fas fa-arrow-left"></i></button>
 				<h2 class="pannel__edit-client-title">Édition du client</h2>
@@ -28,7 +28,7 @@
 
 					<div class="form-group">
 						<label for="client-codepostal"><i class="fas fa-map-pin"></i> Code postal</label>
-						<input type="text" inputmode="numeric" pattern="[0-9]*" id="client-codepostal" name="client_codepostal" placeholder="Code postal du client" class="form-control" autocomplete="postal-code" maxlength="5">
+						<input type="text" id="client-codepostal" name="client_codepostal" placeholder="Code postal du client" class="form-control" autocomplete="postal-code">
 					</div>
 
 					<div class="form-group full-width">
