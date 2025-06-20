@@ -1,0 +1,1068 @@
+function drAW_up(data) {
+  const TEMPLATE_ID = "1cZ7qgm2E7xeCfcDaQHLGrLMGhoI_IyT0UVi3-eGwR0o";
+  const FOLDER_ID = "1GujNDoYuc9V-4S2WIuj5GRGrp_1hRdrF";
+
+  const template = DriveApp.getFileById(TEMPLATE_ID);
+  const copy = template.makeCopy(data.documentData.title, DriveApp.getFolderById(FOLDER_ID));
+  const doc = DocumentApp.openById(copy.getId());
+  const body = doc.getBody();
+
+  let logoBlob = null;
+  if (data.clientData.logo && data.clientData.logo.trim()) {
+    logoBlob = insertClientLogo(body, data.clientData.logo);
+  }
+
+  const variables = {
+    '{{titre}}': data.documentData.title,
+    '{{sousTitre}}': data.documentData.subtitle,
+    '{{dateFull}}': data.dateData.ddmmyyyy,
+    '{{ligneContactClient}}': data.clientData.contact,
+    '{{siteClient}}': data.documentData.site,
+    '{{nomClient}}': data.clientData.nomComplet,
+    '{{adrClient}}': data.clientData.adresse,
+    '{{villeClient}}': data.clientData.ville,
+    '{{CPClient}}': data.clientData.cp,
+    '{{logoClient}}': logoBlob ? '[LOGO INSÉRÉ]' : '',
+    '{{dateMA}}': data.dateData.mmyyyy,
+    '{{accroche}}': data.documentData.footer
+  };
+
+  for (let key in variables) {
+    body.replaceText(key, variables[key]);
+  }
+
+  replaceVariablesInHeadersAndFooters(doc, variables);
+
+  insertArticlesWithHtml(body, data.documentData.selectedArticles);
+  
+  insertFinancialSummaryTable(body, data.documentData.selectedArticles);
+
+  doc.saveAndClose();
+  
+  shareDocumentWithUsers(copy.getId(), data.shareData, data.clientData, data.documentData.title);
+  
+  return doc.getUrl();
+}
+
+function shareDocumentWithUsers(documentId, shareEmails, clientData, documentTitle) {
+  try {    
+    if (!shareEmails || shareEmails.length === 0) {
+      return;
+    }
+    
+    const file = DriveApp.getFileById(documentId);
+    
+    shareEmails.forEach(email => {
+      if (email && email.trim()) {
+        try {
+          file.addEditor(email.trim(), { sendNotificationEmails: false });
+          
+          sendCustomNotificationEmail(email.trim(), documentTitle, clientData, file.getUrl());
+          
+        } catch (shareError) {
+          try {
+            file.addViewer(email.trim(), { sendNotificationEmails: false });
+            sendCustomNotificationEmail(email.trim(), documentTitle, clientData, file.getUrl());
+          } catch (fallbackError) {
+            console.error(`Échec total du partage avec ${email}:`, fallbackError);
+          }
+        }
+      }
+    });    
+  } catch (error) {
+    console.error('Erreur générale lors du partage:', error);
+  }
+}
+
+function sendCustomNotificationEmail(email, documentTitle, clientData, documentUrl) {
+  try {
+    const subject = `Draw-Up • ${documentTitle}`;
+    
+    const htmlBody = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #f8fafc;">
+        
+        <div style="max-width: 600px; margin: 20px auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+          
+          <!-- Header -->
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
+            <h1 style="margin: 0; color: white; font-size: 28px; font-weight: 700;">Draw-Up</h1>
+            <p style="margin: 10px 0 0 0; color: rgba(255,255,255,0.9); font-size: 16px;">Nouveau document généré</p>
+          </div>
+
+          <!-- Content -->
+          <div style="padding: 40px 30px;">
+            
+            <!-- Document Info -->
+            <div style="background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%); padding: 25px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #667eea;">
+              <h2 style="margin: 0 0 15px 0; color: #2d3748; font-size: 20px; font-weight: 600;">📄 ${documentTitle}</h2>
+              <p style="margin: 0; color: #718096; font-size: 14px;">📅 Généré le ${new Date().toLocaleString('fr-FR')}</p>
+            </div>
+
+            <!-- Client Info -->
+            <div style="background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; margin-bottom: 25px;">
+              <h3 style="margin: 0 0 20px 0; color: #4a5568; font-size: 16px; font-weight: 600;">👤 Informations client</h3>
+              <p><strong>Nom :</strong> ${clientData.nomComplet || 'Non spécifié'}</p>
+              ${clientData.email ? `<p><strong>Email :</strong> ${clientData.email}</p>` : ''}
+              ${clientData.adresse ? `<p><strong>Adresse :</strong> ${clientData.adresse}</p>` : ''}
+              ${clientData.ville ? `<p><strong>Ville :</strong> ${clientData.ville} ${clientData.cp || ''}</p>` : ''}
+            </div>
+
+            <!-- CTA Button -->
+            <div style="text-align: center; margin: 35px 0;">
+              <a href="${documentUrl}" 
+                 style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);">
+                📄 Ouvrir le document
+              </a>
+            </div>
+
+            <!-- Permissions -->
+            <div style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; padding: 20px; border-radius: 12px; text-align: center;">
+              <h4 style="margin: 0 0 8px 0; font-size: 16px;">✏️ Droits d'édition accordés</h4>
+              <p style="margin: 0; font-size: 14px; opacity: 0.9;">Vous pouvez modifier ce document et collaborer en temps réel</p>
+            </div>
+
+          </div>
+
+          <!-- Footer -->
+          <div style="background: #f8fafc; padding: 25px 30px; text-align: center; border-top: 1px solid #e2e8f0;">
+            <p style="margin: 0; color: #667eea; font-weight: 700; font-size: 16px;">Draw-Up</p>
+            <p style="margin: 5px 0 0 0; color: #718096; font-size: 12px;">Générateur de documents automatisé</p>
+          </div>
+
+        </div>
+      </body>
+      </html>
+    `;
+    
+    MailApp.sendEmail({
+      to: email,
+      subject: subject,
+      htmlBody: htmlBody,
+      name: 'Draw-Up • Documents'
+    });
+      
+  } catch (emailError) {
+    console.error(`Erreur email pour ${email}:`, emailError);
+  }
+}
+
+function replaceVariablesInHeadersAndFooters(doc, variables) {
+  try {
+    const headerSection = doc.getHeader();
+    if (headerSection) {
+      for (let key in variables) {
+        headerSection.replaceText(key, variables[key]);
+      }
+    }
+    
+    const footerSection = doc.getFooter();
+    if (footerSection) {
+      for (let key in variables) {
+        footerSection.replaceText(key, variables[key]);
+      }
+    }
+    
+    console.log('Variables remplacées dans headers et footers');
+  } catch (error) {
+    console.error('Erreur lors du remplacement dans headers/footers:', error);
+  }
+}
+
+function insertClientLogo(body, base64Data) {
+  try {
+    const logoPlaceholder = body.findText('{{logoClient}}');
+    if (!logoPlaceholder) return null;
+
+    let cleanBase64 = base64Data;
+    if (cleanBase64.includes(',')) {
+      cleanBase64 = cleanBase64.split(',')[1];
+    }
+
+    const binaryString = Utilities.base64Decode(cleanBase64);
+    const blob = Utilities.newBlob(binaryString, 'image/png', 'logo_client.png');
+
+    const element = logoPlaceholder.getElement();
+    const parent = element.getParent();
+    
+    element.asText().deleteText(logoPlaceholder.getStartOffset(), logoPlaceholder.getEndOffsetInclusive());
+    
+    const image = parent.asParagraph().insertInlineImage(logoPlaceholder.getStartOffset(), blob);
+    
+    const originalWidth = image.getWidth();
+    const originalHeight = image.getHeight();
+    const maxWidth = 150;
+    
+    if (originalWidth > maxWidth) {
+      const ratio = maxWidth / originalWidth;
+      image.setWidth(maxWidth);
+      image.setHeight(originalHeight * ratio);
+    }
+
+    return blob;
+  } catch (error) {
+    console.error('Erreur lors de l\'insertion du logo:', error);
+    return null;
+  }
+}
+
+function insertArticlesWithHtml(body, articles) {
+  const remplacement = body.findText('{{articles}}');
+  if (!remplacement) return;
+
+  const element = remplacement.getElement();
+  const bodyIndex = body.getChildIndex(element.getParent());
+  body.removeChild(element.getParent());
+
+  let currentIndex = bodyIndex;
+
+  articles.forEach(article => {
+    // Titre
+    const titrePara = body.insertParagraph(currentIndex++, article.title)
+                          .setHeading(DocumentApp.ParagraphHeading.HEADING2);
+
+    if (article.isOption) {
+      const optionPara = body.insertParagraph(currentIndex++, "Option");
+      const optionText = optionPara.editAsText();
+      optionText.setFontSize(0, optionText.getText().length - 1, 8);
+      optionText.setForegroundColor(0, optionText.getText().length - 1, "#666666");
+      optionText.setItalic(0, optionText.getText().length - 1, true);
+    }
+
+    // Prix HT et TTC
+    const prixTextStr = `Prix HT : ${article.priceHT} € | TTC : ${(article.priceHT * (1 + article.taxPercent / 100)).toFixed(2)} €`;
+    const prixPara = body.insertParagraph(currentIndex++, prixTextStr);
+    const prixText = prixPara.editAsText();
+    prixText.setForegroundColor(0, prixText.getText().length - 1, '#444444');
+
+    // Périodicité
+    const periodTextStr = 'Facturation : ' + (article.period || '');
+    const periodPara = body.insertParagraph(currentIndex++, periodTextStr);
+    const periodText = periodPara.editAsText();
+    periodText.setItalic(0, periodText.getText().length - 1, true);
+
+    const startUnderline = 'Facturation : '.length;
+    if (periodText.getText().length > startUnderline) {
+      periodText.setUnderline(startUnderline, periodText.getText().length - 1, true);
+    }
+
+    body.insertParagraph(currentIndex++, '');
+
+    if (article.content && article.content.trim()) {
+      currentIndex = insertHtmlContentWithStyles(body, currentIndex, article.content);
+    }
+
+    body.insertParagraph(currentIndex++, '');
+    body.insertParagraph(currentIndex++, '');
+  });
+}
+
+function insertHtmlContentWithStyles(body, startIndex, htmlContent) {
+  if (!htmlContent || !htmlContent.trim()) return startIndex;
+  
+  let currentIndex = startIndex;
+  
+  const cleanedHtml = cleanAndNormalizeHtml(htmlContent);
+  const parsedElements = parseHtmlToElements(cleanedHtml);
+  
+  parsedElements.forEach(element => {
+    currentIndex = insertElementIntoDocument(body, currentIndex, element);
+  });
+  
+  return currentIndex;
+}
+
+function cleanAndNormalizeHtml(html) {
+  return html
+    // Supprimer les commentaires
+    .replace(/<!--[\s\S]*?-->/g, '')
+    // Normaliser les espaces
+    .replace(/\s+/g, ' ')
+    // Normaliser les balises auto-fermantes
+    .replace(/<(br|hr|img)([^>]*)>/gi, '<$1$2/>')
+    // Nettoyer les balises vides inutiles
+    .replace(/<(p|div|span)\s*>\s*<\/\1>/gi, '')
+    .trim();
+}
+
+function parseHtmlToElements(html) {
+  const elements = [];
+  let currentPos = 0;
+  
+  while (currentPos < html.length) {
+    const nextTagStart = html.indexOf('<', currentPos);
+    
+    // Texte avant la prochaine balise
+    if (nextTagStart === -1 || nextTagStart > currentPos) {
+      const textEnd = nextTagStart === -1 ? html.length : nextTagStart;
+      const textContent = html.substring(currentPos, textEnd);
+      if (textContent.trim()) {
+        elements.push({
+          type: 'text',
+          content: decodeHtmlEntities(textContent),
+          styles: {}
+        });
+      }
+      currentPos = textEnd;
+      continue;
+    }
+    
+    // Analyser la balise
+    const tagEnd = html.indexOf('>', nextTagStart);
+    if (tagEnd === -1) break;
+    
+    const fullTag = html.substring(nextTagStart, tagEnd + 1);
+    const tagMatch = fullTag.match(/<\/?([a-zA-Z][a-zA-Z0-9]*)[^>]*>/);
+    
+    if (!tagMatch) {
+      currentPos = tagEnd + 1;
+      continue;
+    }
+    
+    const tagName = tagMatch[1].toLowerCase();
+    
+    // Gérer les balises auto-fermantes
+    if (tagName === 'br') {
+      elements.push({ type: 'break' });
+      currentPos = tagEnd + 1;
+      continue;
+    }
+    
+    if (tagName === 'hr') {
+      elements.push({ type: 'separator' });
+      currentPos = tagEnd + 1;
+      continue;
+    }
+    
+    // Gérer les structures complexes
+    if (['table', 'ul', 'ol'].includes(tagName)) {
+      const structureResult = parseComplexStructure(html, currentPos, tagName);
+      if (structureResult.element) {
+        elements.push(structureResult.element);
+      }
+      currentPos = structureResult.nextPos;
+      continue;
+    }
+    
+    // Gérer les éléments de contenu
+    if (['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li'].includes(tagName)) {
+      const contentResult = parseContentElement(html, currentPos, tagName);
+      if (contentResult.element) {
+        elements.push(contentResult.element);
+      }
+      currentPos = contentResult.nextPos;
+      continue;
+    }
+    
+    currentPos = tagEnd + 1;
+  }
+  
+  return elements;
+}
+
+function parseComplexStructure(html, startPos, structureType) {
+  const openingTag = `<${structureType}`;
+  const closingTag = `</${structureType}>`;
+  
+  const startTag = html.indexOf(openingTag, startPos);
+  if (startTag === -1) return { element: null, nextPos: startPos };
+  
+  const tagEnd = html.indexOf('>', startTag);
+  const contentStart = tagEnd + 1;
+  
+  // Trouver la balise fermante correspondante
+  let depth = 1;
+  let pos = contentStart;
+  let contentEnd = -1;
+  
+  while (pos < html.length && depth > 0) {
+    const nextOpen = html.indexOf(openingTag, pos);
+    const nextClose = html.indexOf(closingTag, pos);
+    
+    if (nextClose === -1) break;
+    
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++;
+      pos = html.indexOf('>', nextOpen) + 1;
+    } else {
+      depth--;
+      if (depth === 0) {
+        contentEnd = nextClose;
+      }
+      pos = nextClose + closingTag.length;
+    }
+  }
+  
+  if (contentEnd === -1) {
+    return { element: null, nextPos: startPos };
+  }
+  
+  const content = html.substring(contentStart, contentEnd);
+  const attributes = extractAttributes(html.substring(startTag, tagEnd + 1));
+  
+  let element;
+  
+  switch (structureType) {
+    case 'table':
+      element = parseTableContent(content, attributes);
+      break;
+    case 'ul':
+      element = parseListContent(content, 'unordered', attributes);
+      break;
+    case 'ol':
+      element = parseListContent(content, 'ordered', attributes);
+      break;
+    default:
+      element = null;
+  }
+  
+  return {
+    element,
+    nextPos: pos
+  };
+}
+
+function parseTableContent(tableHtml, attributes) {
+  const rows = [];
+  const rowMatches = tableHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || [];
+  
+  rowMatches.forEach(rowHtml => {
+    const cells = [];
+    const cellMatches = rowHtml.match(/<t[hd][^>]*>[\s\S]*?<\/t[hd]>/gi) || [];
+    
+    cellMatches.forEach(cellHtml => {
+      const cellContent = cellHtml.replace(/<\/?t[hd][^>]*>/gi, '');
+      const cellStyles = extractStylesFromHtml(cellHtml);
+      const isHeader = cellHtml.toLowerCase().includes('<th');
+      
+      cells.push({
+        content: cleanTextContent(cellContent),
+        styles: cellStyles,
+        isHeader
+      });
+    });
+    
+    if (cells.length > 0) {
+      rows.push(cells);
+    }
+  });
+  
+  return {
+    type: 'table',
+    rows,
+    styles: extractStylesFromAttributes(attributes)
+  };
+}
+
+function parseListContent(listHtml, listType, attributes) {
+  const items = [];
+  const itemMatches = listHtml.match(/<li[^>]*>[\s\S]*?<\/li>/gi) || [];
+  
+  itemMatches.forEach(itemHtml => {
+    const itemContent = itemHtml.replace(/<\/?li[^>]*>/gi, '');
+    const itemStyles = extractStylesFromHtml(itemHtml);
+    
+    // Gérer les sous-listes
+    const subListMatch = itemContent.match(/<[ou]l[^>]*>[\s\S]*<\/[ou]l>/i);
+    let mainContent = itemContent;
+    let subList = null;
+    
+    if (subListMatch) {
+      mainContent = itemContent.replace(subListMatch[0], '').trim();
+      const subListType = subListMatch[0].toLowerCase().startsWith('<ol') ? 'ordered' : 'unordered';
+      subList = parseListContent(subListMatch[0], subListType, {});
+    }
+    
+    items.push({
+      content: cleanTextContent(mainContent),
+      styles: itemStyles,
+      subList
+    });
+  });
+  
+  return {
+    type: 'list',
+    listType,
+    items,
+    styles: extractStylesFromAttributes(attributes)
+  };
+}
+
+function parseContentElement(html, startPos, tagName) {
+  const openingTag = `<${tagName}`;
+  const closingTag = `</${tagName}>`;
+  
+  const startTag = html.indexOf(openingTag, startPos);
+  if (startTag === -1) return { element: null, nextPos: startPos };
+  
+  const tagEnd = html.indexOf('>', startTag);
+  const contentStart = tagEnd + 1;
+  const contentEnd = html.indexOf(closingTag, contentStart);
+  
+  if (contentEnd === -1) return { element: null, nextPos: startPos };
+  
+  const content = html.substring(contentStart, contentEnd);
+  const attributes = extractAttributes(html.substring(startTag, tagEnd + 1));
+  const styles = extractStylesFromAttributes(attributes);
+  
+  // Ajouter les styles spécifiques aux balises
+  if (tagName.match(/^h[1-6]$/)) {
+    styles.heading = parseInt(tagName.charAt(1));
+    styles.bold = true;
+    styles.fontSize = [24, 20, 18, 16, 14, 12][styles.heading - 1];
+  }
+  
+  return {
+    element: {
+      type: 'paragraph',
+      content: parseInlineElements(content),
+      styles,
+      tagName
+    },
+    nextPos: contentEnd + closingTag.length
+  };
+}
+
+function parseInlineElements(html) {
+  const segments = [];
+  let currentPos = 0;
+  
+  // Regex pour capturer le texte et les balises inline
+  const inlineRegex = /<(b|strong|i|em|u|s|strike|del|span|a)[^>]*>.*?<\/\1>|[^<]+/gi;
+  let match;
+  
+  while ((match = inlineRegex.exec(html)) !== null) {
+    const fullMatch = match[0];
+    
+    if (fullMatch.startsWith('<')) {
+      // C'est une balise inline
+      const tagMatch = fullMatch.match(/<([^>\s]+)[^>]*>(.*?)<\/\1>/);
+      if (tagMatch) {
+        const tagName = tagMatch[1].toLowerCase();
+        const content = tagMatch[2];
+        const styles = extractStylesFromHtml(fullMatch);
+        
+        // Ajouter les styles par défaut des balises
+        switch (tagName) {
+          case 'b':
+          case 'strong':
+            styles.bold = true;
+            break;
+          case 'i':
+          case 'em':
+            styles.italic = true;
+            break;
+          case 'u':
+            styles.underline = true;
+            break;
+          case 's':
+          case 'strike':
+          case 'del':
+            styles.strikethrough = true;
+            break;
+          case 'a':
+            styles.link = extractLinkUrl(fullMatch);
+            styles.color = styles.color || '#0066cc';
+            styles.underline = true;
+            break;
+        }
+        
+        segments.push({
+          type: 'styled-text',
+          content: cleanTextContent(content),
+          styles
+        });
+      }
+    } else {
+      // C'est du texte simple
+      const textContent = cleanTextContent(fullMatch);
+      if (textContent.trim()) {
+        segments.push({
+          type: 'text',
+          content: textContent,
+          styles: {}
+        });
+      }
+    }
+  }
+  
+  return segments.length > 0 ? segments : [{ type: 'text', content: cleanTextContent(html), styles: {} }];
+}
+
+function insertElementIntoDocument(body, currentIndex, element) {
+  switch (element.type) {
+    case 'text':
+    case 'paragraph':
+      return insertParagraphElement(body, currentIndex, element);
+      
+    case 'table':
+      return insertTableElement(body, currentIndex, element);
+      
+    case 'list':
+      return insertListElement(body, currentIndex, element);
+      
+    case 'break':
+      body.insertParagraph(currentIndex, '');
+      return currentIndex + 1;
+      
+    case 'separator':
+      const sepPara = body.insertParagraph(currentIndex, '─'.repeat(50));
+      sepPara.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
+      sepPara.editAsText().setForegroundColor('#cccccc');
+      return currentIndex + 1;
+      
+    default:
+      return currentIndex;
+  }
+}
+
+function insertParagraphElement(body, currentIndex, element) {
+  const content = element.content || element.text || '';
+  
+  if (Array.isArray(content)) {
+    // Contenu avec segments stylés
+    const paragraph = body.insertParagraph(currentIndex, '');
+    let textOffset = 0;
+    
+    content.forEach(segment => {
+      if (segment.content && segment.content.trim()) {
+        paragraph.appendText(segment.content);
+        const text = paragraph.editAsText();
+        const startOffset = textOffset;
+        const endOffset = textOffset + segment.content.length - 1;
+        
+        applyInlineStyles(text, startOffset, endOffset, segment.styles);
+        textOffset += segment.content.length;
+      }
+    });
+    
+    // Appliquer les styles de paragraphe
+    if (element.styles) {
+      applyParagraphStyles(paragraph, element.styles);
+    }
+    
+  } else {
+    // Contenu simple
+    const paragraph = body.insertParagraph(currentIndex, content);
+    if (element.styles) {
+      applyParagraphStyles(paragraph, element.styles);
+    }
+  }
+  
+  return currentIndex + 1;
+}
+
+function insertTableElement(body, currentIndex, element) {
+  if (!element.rows || element.rows.length === 0) return currentIndex;
+  
+  // Préparer les données du tableau
+  const tableData = element.rows.map(row => 
+    row.map(cell => cell.content || '')
+  );
+  
+  const table = body.insertTable(currentIndex, tableData);
+  
+  // Appliquer les styles aux cellules
+  element.rows.forEach((row, rowIndex) => {
+    const tableRow = table.getRow(rowIndex);
+    
+    row.forEach((cell, cellIndex) => {
+      if (cellIndex < tableRow.getNumCells()) {
+        const tableCell = tableRow.getCell(cellIndex);
+        const cellParagraph = tableCell.getChild(0).asParagraph();
+        
+        // Styles de cellule
+        if (cell.isHeader) {
+          cellParagraph.setBold(true);
+          tableCell.setBackgroundColor('#e6e6e6');
+        }
+        
+        if (cell.styles) {
+          applyParagraphStyles(cellParagraph, cell.styles);
+          if (cell.styles.backgroundColor) {
+            tableCell.setBackgroundColor(cell.styles.backgroundColor);
+          }
+        }
+        
+        // Style alterné pour les lignes
+        if (!cell.isHeader && rowIndex % 2 === 1) {
+          tableCell.setBackgroundColor('#f9f9f9');
+        }
+      }
+    });
+  });
+  
+  // Ajuster la largeur des colonnes
+  if (table.getNumRows() > 0) {
+    const totalWidth = 450;
+    const colCount = table.getRow(0).getNumCells();
+    const colWidth = totalWidth / colCount;
+    
+    for (let i = 0; i < colCount; i++) {
+      table.setColumnWidth(i, colWidth);
+    }
+  }
+  
+  return currentIndex + 1;
+}
+
+function insertListElement(body, currentIndex, element) {
+  let index = currentIndex;
+  
+  element.items.forEach((item, itemIndex) => {
+    let prefix = '';
+    if (element.listType === 'ordered') {
+      prefix = `${itemIndex + 1}. `;
+    } else {
+      prefix = '• ';
+    }
+    
+    const paragraph = body.insertParagraph(index, prefix + item.content);
+    paragraph.setIndentStart(18); // Indentation pour les listes
+    
+    // Appliquer les styles
+    if (item.styles) {
+      applyParagraphStyles(paragraph, item.styles);
+    }
+    
+    index++;
+    
+    // Gérer les sous-listes
+    if (item.subList) {
+      item.subList.items.forEach((subItem, subIndex) => {
+        let subPrefix = '';
+        if (item.subList.listType === 'ordered') {
+          subPrefix = `   ${subIndex + 1}. `;
+        } else {
+          subPrefix = '   ◦ ';
+        }
+        
+        const subParagraph = body.insertParagraph(index, subPrefix + subItem.content);
+        subParagraph.setIndentStart(36); // Indentation pour sous-liste
+        
+        if (subItem.styles) {
+          applyParagraphStyles(subParagraph, subItem.styles);
+        }
+        
+        index++;
+      });
+    }
+  });
+  
+  return index;
+}
+
+function applyInlineStyles(text, startOffset, endOffset, styles) {
+  if (!styles || startOffset > endOffset) return;
+  
+  try {
+    if (styles.bold) text.setBold(startOffset, endOffset, true);
+    if (styles.italic) text.setItalic(startOffset, endOffset, true);
+    if (styles.underline) text.setUnderline(startOffset, endOffset, true);
+    if (styles.strikethrough) text.setStrikethrough(startOffset, endOffset, true);
+    if (styles.color) text.setForegroundColor(startOffset, endOffset, styles.color);
+    if (styles.backgroundColor) text.setBackgroundColor(startOffset, endOffset, styles.backgroundColor);
+    if (styles.fontSize) text.setFontSize(startOffset, endOffset, styles.fontSize);
+    if (styles.fontFamily) text.setFontFamily(startOffset, endOffset, styles.fontFamily);
+    
+    // Liens (Google Docs ne supporte pas les liens editables via script, on se contente du style)
+    if (styles.link) {
+      text.setLinkUrl(startOffset, endOffset, styles.link);
+    }
+  } catch (error) {
+    console.error('Erreur lors de l\'application des styles inline:', error);
+  }
+}
+
+function applyParagraphStyles(paragraph, styles) {
+  if (!styles) return;
+  
+  try {
+    const text = paragraph.editAsText();
+    const textLength = text.getText().length;
+    
+    if (textLength > 0) {
+      // Styles de texte
+      if (styles.bold) text.setBold(0, textLength - 1, true);
+      if (styles.italic) text.setItalic(0, textLength - 1, true);
+      if (styles.underline) text.setUnderline(0, textLength - 1, true);
+      if (styles.strikethrough) text.setStrikethrough(0, textLength - 1, true);
+      if (styles.color) text.setForegroundColor(0, textLength - 1, styles.color);
+      if (styles.backgroundColor) text.setBackgroundColor(0, textLength - 1, styles.backgroundColor);
+      if (styles.fontSize) text.setFontSize(0, textLength - 1, styles.fontSize);
+      if (styles.fontFamily) text.setFontFamily(0, textLength - 1, styles.fontFamily);
+    }
+    
+    // Styles de paragraphe
+    if (styles.alignment) {
+      switch (styles.alignment) {
+        case 'center':
+          paragraph.setAlignment(DocumentApp.HorizontalAlignment.CENTER);
+          break;
+        case 'right':
+          paragraph.setAlignment(DocumentApp.HorizontalAlignment.RIGHT);
+          break;
+        case 'justify':
+          paragraph.setAlignment(DocumentApp.HorizontalAlignment.JUSTIFY);
+          break;
+        default:
+          paragraph.setAlignment(DocumentApp.HorizontalAlignment.LEFT);
+      }
+    }
+    
+    // Titres
+    if (styles.heading) {
+      const headings = [
+        DocumentApp.ParagraphHeading.HEADING1,
+        DocumentApp.ParagraphHeading.HEADING2,
+        DocumentApp.ParagraphHeading.HEADING3,
+        DocumentApp.ParagraphHeading.HEADING4,
+        DocumentApp.ParagraphHeading.HEADING5,
+        DocumentApp.ParagraphHeading.HEADING6
+      ];
+      
+      if (styles.heading >= 1 && styles.heading <= 6) {
+        paragraph.setHeading(headings[styles.heading - 1]);
+      }
+    }
+    
+  } catch (error) {
+    console.error('Erreur lors de l\'application des styles de paragraphe:', error);
+  }
+}
+
+function extractAttributes(tagHtml) {
+  const attributes = {};
+  const attrRegex = /(\w+)\s*=\s*["']([^"']*)["']/g;
+  let match;
+  
+  while ((match = attrRegex.exec(tagHtml)) !== null) {
+    attributes[match[1].toLowerCase()] = match[2];
+  }
+  
+  return attributes;
+}
+
+function extractStylesFromAttributes(attributes) {
+  const styles = {};
+  
+  if (attributes.style) {
+    parseCssPropertiesComplete(attributes.style, styles);
+  }
+  
+  if (attributes.class) {
+    // Vous pouvez ajouter ici la gestion des classes CSS prédéfinies
+  }
+  
+  return styles;
+}
+
+function extractStylesFromHtml(html) {
+  const styles = {};
+  const attributes = extractAttributes(html);
+  return extractStylesFromAttributes(attributes);
+}
+
+function extractLinkUrl(linkHtml) {
+  const hrefMatch = linkHtml.match(/href\s*=\s*["']([^"']*)["']/i);
+  return hrefMatch ? hrefMatch[1] : null;
+}
+
+function cleanTextContent(text) {
+  return decodeHtmlEntities(text)
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function decodeHtmlEntities(text) {
+  const entities = {
+    '&nbsp;': ' ',
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&#39;': "'",
+    '&apos;': "'",
+    '&euro;': '€',
+    '&copy;': '©',
+    '&reg;': '®',
+    '&trade;': '™'
+  };
+  
+  return text.replace(/&[a-zA-Z0-9#]+;/g, match => entities[match] || match);
+}
+
+function parseCssPropertiesComplete(cssText, style) {
+  // Couleurs
+  const colorMatch = cssText.match(/color\s*:\s*([^;]+)/i);
+  if (colorMatch) style.color = normalizeColorComplete(colorMatch[1].trim());
+  
+  const bgMatch = cssText.match(/background-color\s*:\s*([^;]+)/i);
+  if (bgMatch) style.backgroundColor = normalizeColorComplete(bgMatch[1].trim());
+  
+  // Police
+  const sizeMatch = cssText.match(/font-size\s*:\s*([^;]+)/i);
+  if (sizeMatch) {
+    const size = parseFloat(sizeMatch[1]);
+    if (size > 0) style.fontSize = Math.round(size);
+  }
+  
+  const fontMatch = cssText.match(/font-family\s*:\s*([^;]+)/i);
+  if (fontMatch) {
+    style.fontFamily = fontMatch[1].trim().replace(/['"]/g, '').split(',')[0];
+  }
+  
+  // Alignement
+  const alignMatch = cssText.match(/text-align\s*:\s*([^;]+)/i);
+  if (alignMatch) {
+    style.alignment = alignMatch[1].trim().toLowerCase();
+  }
+  
+  // Formatage
+  if (/font-weight\s*:\s*(?:bold|[6-9]00)/i.test(cssText)) style.bold = true;
+  if (/font-style\s*:\s*italic/i.test(cssText)) style.italic = true;
+  if (/text-decoration\s*:\s*underline/i.test(cssText)) style.underline = true;
+  if (/text-decoration\s*:\s*line-through/i.test(cssText)) style.strikethrough = true;
+}
+
+function normalizeColorComplete(colorStr) {
+  colorStr = colorStr.toLowerCase().trim();
+  
+  const namedColors = {
+    'red': '#ff0000', 'blue': '#0000ff', 'green': '#008000', 'black': '#000000',
+    'white': '#ffffff', 'gray': '#808080', 'grey': '#808080', 'yellow': '#ffff00',
+    'orange': '#ffa500', 'purple': '#800080', 'pink': '#ffc0cb', 'brown': '#a52a2a',
+    'darkblue': '#000080', 'lightblue': '#add8e6', 'darkgreen': '#006400',
+    'lightgray': '#d3d3d3', 'darkgray': '#a9a9a9', 'silver': '#c0c0c0',
+    'navy': '#000080', 'teal': '#008080', 'lime': '#00ff00', 'aqua': '#00ffff',
+    'fuchsia': '#ff00ff', 'maroon': '#800000', 'olive': '#808000'
+  };
+  
+  if (namedColors[colorStr]) return namedColors[colorStr];
+  
+  // RGB/RGBA
+  const rgbMatch = colorStr.match(/rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+  if (rgbMatch) {
+    const r = parseInt(rgbMatch[1]).toString(16).padStart(2, '0');
+    const g = parseInt(rgbMatch[2]).toString(16).padStart(2, '0');
+    const b = parseInt(rgbMatch[3]).toString(16).padStart(2, '0');
+    return '#' + r + g + b;
+  }
+  
+  // HEX
+  if (/^#[0-9a-f]{6}$/i.test(colorStr)) return colorStr;
+  if (/^#[0-9a-f]{3}$/i.test(colorStr)) {
+    const chars = colorStr.substring(1);
+    return '#' + chars[0] + chars[0] + chars[1] + chars[1] + chars[2] + chars[2];
+  }
+  
+  return null;
+}
+
+function insertFinancialSummaryTable(body, articles) {
+  const remplacement = body.findText('{{synthese}}');
+  if (!remplacement) return;
+
+  const element = remplacement.getElement();
+  const bodyIndex = body.getChildIndex(element.getParent());
+  body.removeChild(element.getParent());
+
+  body.insertParagraph(bodyIndex, 'Synthèse financière')
+      .setHeading(DocumentApp.ParagraphHeading.HEADING2);
+
+  const nonOptionArticles = articles.filter(a => !a.isOption);
+
+  const tableData = [
+    ['Prestations', 'Facturation', 'Prix HT', 'Prix TTC'],
+    ...nonOptionArticles.map(a => [
+      a.title,
+      a.period || '',
+      `${a.priceHT.toFixed(2)} €`,
+      `${(a.priceHT * (1 + a.taxPercent / 100)).toFixed(2)} €`
+    ])
+  ];
+
+  const totalHT = nonOptionArticles.reduce((sum, a) => sum + a.priceHT, 0);
+  const totalTTC = nonOptionArticles.reduce((sum, a) => sum + a.priceHT * (1 + a.taxPercent / 100), 0);
+  tableData.push(['Total', '', `${totalHT.toFixed(2)} €`, `${totalTTC.toFixed(2)} €`]);
+
+  const table = body.insertTable(bodyIndex + 1, tableData);
+
+  const colWidths = [220, 80, 75, 75];
+  const rowCount = table.getNumRows();
+
+  for (let r = 0; r < rowCount; r++) {
+    const row = table.getRow(r);
+    for (let c = 0; c < row.getNumCells(); c++) {
+      const cell = row.getCell(c);
+      cell.setWidth(colWidths[c]);
+      
+      const paragraph = cell.getChild(0).asParagraph();
+
+      if (r === 0) {
+        paragraph.setBold(true).setFontSize(12);
+        cell.setBackgroundColor('#dddddd');
+      } else if (r === rowCount - 1) {
+        paragraph.setBold(true).setFontSize(12);
+        cell.setBackgroundColor('#bbbbbb');
+      } else if (r % 2 === 0) {
+        cell.setBackgroundColor('#ffffff');
+        paragraph.setFontSize(11).setBold(false);
+      } else {
+        cell.setBackgroundColor('#f9f9f9');
+        paragraph.setFontSize(11).setBold(false);
+      }
+
+      paragraph.setAlignment(c === 0 ? DocumentApp.HorizontalAlignment.LEFT : DocumentApp.HorizontalAlignment.RIGHT);
+    }
+  }
+}
+
+function doPost(e) {
+  try {
+    let data;
+    
+    if (e.parameter && e.parameter.data) {
+      data = JSON.parse(e.parameter.data);
+    } else if (e.postData && e.postData.contents) {
+      data = JSON.parse(e.postData.contents);
+    } else {
+      throw new Error('Aucune donnée reçue');
+    }
+    
+    const documentUrl = drAW_up(data);
+    
+    if (e.parameter && e.parameter.source === 'draw-up-form') {
+      return HtmlService.createHtmlOutput(`
+        <script>
+          window.location.replace("${documentUrl}");
+        </script>
+      `);
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      documentUrl: documentUrl
+    })).setMimeType(ContentService.MimeType.JSON);
+    
+  } catch (err) {
+    if (e.parameter && e.parameter.source === 'draw-up-form') {
+      return HtmlService.createHtmlOutput(`
+        <script>
+          alert('Erreur: ${err.toString()}');
+          window.close();
+        </script>
+      `);
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: err.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
