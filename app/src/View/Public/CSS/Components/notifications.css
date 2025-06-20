@@ -1,0 +1,109 @@
+/* * ------------------------------------ * */
+/**       	Notifications
+/* * ------------------------------------ * */
+
+.notification {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	padding: 15px 25px;
+	background-color: var(--color-bg-sub);
+	border-left: 4px solid;
+	border-radius: var(--corner-sm);
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	font-size: 1rem;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	z-index: 1000;
+	max-width: calc(100% - 40px);
+	animation: slideInNotification 0.4s ease-out forwards;
+	transition: all 0.3s ease;
+}
+
+.notification.hiding {
+	animation: fadeOutNotification 0.4s ease-in forwards;
+}
+
+.notification i {
+	font-size: 1.2rem;
+}
+
+.notification--success {
+	border-color: var(--color-success, #28a745);
+	background-color: rgba(40, 167, 69, 0.08);
+}
+
+.notification--success i {
+	color: var(--color-success, #28a745);
+}
+
+.notification--error {
+	border-color: var(--color-error, #dc3545);
+	background-color: rgba(220, 53, 69, 0.08);
+}
+
+.notification--error i {
+	color: var(--color-error, #dc3545);
+}
+
+.notification--warning {
+	border-color: var(--color-warning, #ffc107);
+	background-color: rgba(255, 193, 7, 0.08);
+}
+
+.notification--warning i {
+	color: var(--color-warning, #ffc107);
+}
+
+.notification--info {
+	border-color: var(--color-info, #17a2b8);
+	background-color: rgba(23, 162, 184, 0.08);
+}
+
+.notification--info i {
+	color: var(--color-info, #17a2b8);
+}
+
+.notification__close {
+	margin-left: auto;
+	cursor: pointer;
+	background: none;
+	border: none;
+	font-size: 1rem;
+	color: var(--color-text-dark);
+	opacity: 0.5;
+	transition: opacity 0.3s ease;
+}
+
+.notification__close:hover {
+	opacity: 1;
+}
+
+@media screen and (max-width: 768px) {
+	.notification {
+		top: auto;
+		bottom: 20px;
+		right: 50%;
+		transform: translateX(50%) !important;
+		width: 95%;
+		padding: 14px 18px;
+		font-size: 1rem;
+		max-width: 500px;
+		border-radius: var(--corner-md);
+	}
+	
+	.notification i {
+		font-size: 1.3rem;
+	}
+	
+	.notification.hiding {
+		animation: fadeOutNotification 0.4s ease-in forwards;
+	}
+	
+	.notification__close {
+		padding: 8px;
+		margin-right: -5px;
+	}
+}

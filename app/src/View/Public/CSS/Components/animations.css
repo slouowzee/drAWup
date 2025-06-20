@@ -1,0 +1,85 @@
+/* * ------------------------------------ * */
+/**       	Animations
+/* * ------------------------------------ * */
+
+.hidden {
+	display: none !important;
+}
+
+.fade-in {
+	animation: fadeIn 0.3s ease;
+}
+
+@keyframes pulse {
+	0% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+	50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+	100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes slideInNotification {
+	from {
+		transform: translateY(-30px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes fadeOutNotification {
+	from {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	to {
+		transform: translateY(-30px);
+		opacity: 0;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+}
+
+@media (max-width: 768px) {
+	@keyframes slideInNotification {
+		from {
+			bottom: -50px;
+			opacity: 0;
+		}
+		to {
+			bottom: 20px;
+			opacity: 1;
+		}
+	}
+	
+	@keyframes fadeOutNotification {
+		from {
+			bottom: 20px;
+			opacity: 1;
+		}
+		to {
+			bottom: -50px;
+			opacity: 0;
+		}
+	}
+}

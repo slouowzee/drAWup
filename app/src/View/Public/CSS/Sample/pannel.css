@@ -1,0 +1,29 @@
+/* * ------------------------------------ * */
+/**             Pannel / Général
+/* * ------------------------------------ * */
+
+.pannel__content {
+	margin-left: var(--sidebar-expanded);
+	padding: 2rem;
+	flex: 1;
+	transition:
+		margin-left var(--transition-speed-slow) ease,
+		background-color var(--transition-speed) ease,
+		color var(--transition-speed) ease;
+	min-height: 100vh;
+	background-color: var(--color-bg);
+	opacity: 0;
+	animation: fadeIn var(--transition-speed-slow) ease-out forwards;
+}
+
+.pannel__navbar.collapsed ~ .pannel__content {
+	margin-left: var(--sidebar-collapsed);
+}
+
+.pannel__content-header {
+	margin-left: 0.8rem;
+}
+
+.pannel__content.fade-out {
+	animation: fadeOut 0.3s ease-in forwards;
+}

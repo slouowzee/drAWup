@@ -1,0 +1,86 @@
+/* * ------------------------------------ * */
+/** 	       	     Login
+/* * ------------------------------------ * */
+
+.login__container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--color-bg);
+	transition:
+		background-color var(--transition-speed-slow) ease,
+		color var(--transition-speed-slow) ease;
+}
+
+.login {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 500px;
+	padding: 20px;
+	border-radius: var(--corner-xl);
+	box-shadow: var(--shadow);
+	backdrop-filter: blur(10px);
+	background-color: var(--color-bg-sub);
+	transition:
+		background-color var(--transition-speed-slow) ease,
+		color var(--transition-speed-slow) ease;
+}
+
+.login__logo__wrapper {
+	width: 250px;
+	margin-bottom: 10px;
+	user-select: none;
+}
+
+.login__logo-light {
+	display: block;
+}
+
+.login__logo-dark {
+	display: none;
+}
+
+.dark-theme .login__logo-light {
+	display: none;
+}
+
+.dark-theme .login__logo-dark {
+	display: block;
+}
+
+.second__theme__toggle {
+	bottom: 20px;
+	right: 40px;
+	position: absolute;
+	border-radius: var(--corner-sm);
+	background-color: var(--color-bg-sub);
+	box-shadow: var(--shadow);
+	width: 40px;
+	height: 40px;
+	color: var(--color-text-bright);
+	transition:
+		background-color var(--transition-speed) ease,
+		color var(--transition-speed) ease;
+}
+
+@media (max-width: 768px) {
+	.login {
+		width: 85%;
+		padding: 15px;
+	}
+
+	.login__logo__wrapper {
+		width: 200px;
+	}
+
+	.second__theme__toggle {
+		right: 20px;
+		bottom: 15px;
+		width: 35px;
+		height: 35px;
+	}
+}

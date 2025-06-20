@@ -1,0 +1,51 @@
+/* * ------------------------------------ * */
+/** 		   Variables
+/* * ------------------------------------ * */
+
+:root {
+	--color-bg: #f0f0f0;
+	--color-bg-sub: #ffffff;
+	--color-text-bright: #1e1e1e;
+	--color-text-dark: #2e2e2e;
+	--color-element-blur: rgba(229, 87, 30, 0.15);
+	--color-element: #E5571E;
+	--color-element-hover: #dd5422;
+	--color-element-active: #c84c1f;
+
+	--shadow: 0 0px 15px rgba(0, 0, 0, 0.4);
+	--shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
+	--shadow-md: 0 4px 10px rgba(0, 0, 0, 0.15);
+	--shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.1);
+
+	--corner-xl: 16px;
+	--corner-lg: 12px;
+	--corner-md: 10px;
+	--corner-sm: 8px;
+	--corner-xs: 4px;
+
+	--text-font: 'Poppins', sans-serif;
+	
+	--sidebar-expanded: 240px;
+	--sidebar-collapsed: 64px;
+
+	--transition-speed: 0.3s;
+	--transition-speed-fast: 0.2s;
+	--transition-speed-slow: 0.5s;
+	--transition-speed-span: 0.12s;
+	
+	--color-success: #28a745;
+	--color-error: #dc3545;
+	--color-warning: #ffc107;
+	--color-info: #17a2b8;
+}
+
+body.dark-theme {
+	--color-bg: #1e1e1e;
+	--color-bg-sub: #2b2b2b;
+	--color-text-bright: #d0d0d0;
+	
+	--shadow: 0 0px 15px rgba(0, 0, 0, 0.6);
+	--shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.2);
+	--shadow-md: 0 4px 10px rgba(0, 0, 0, 0.25);
+	--shadow-hover: 0 6px 15px rgba(0, 0, 0, 0.2);
+}

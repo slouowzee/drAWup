@@ -1,0 +1,31 @@
+/* * ------------------------------------ * */
+/**      	 Base Styles
+/* * ------------------------------------ * */
+
+@import url("./Base/reset.css");
+@import url("./Base/var.css");
+
+
+/* * ------------------------------------ * */
+/**      	 Components 
+/* * ------------------------------------ * */
+@import url("./Components/sidebar.css");
+@import url("./Components/animations.css");
+@import url("./Components/notifications.css");
+@import url("./Components/summernote-lite.css");
+
+
+/* * ------------------------------------ * */
+/**      	    Pages
+/* * ------------------------------------ * */
+@import url("./Sample/login.css");
+@import url("./Sample/wait.css");
+@import url("./Sample/pannel.css");
+@import url("./Sample/WelcomePannel.css");
+@import url("./Sample/Client/ClientPannel.css");
+@import url("./Sample/Client/EditClientPannel.css");
+@import url("./Sample/Client/AddClientPannel.css");
+@import url("./Sample/Article/AddArticlePannel.css");
+@import url("./Sample/Article/ArticlePannel.css");
+@import url("./Sample/Article/EditArticlePannel.css");
+@import url("./Sample/NewDocPannel.css");
